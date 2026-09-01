@@ -1,0 +1,89 @@
+<!-- 驱虫记录列表 -->
+<navigation-bar title="驱虫记录" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="deworming-list-content">
+  <!-- 体内驱虫 -->
+  <view class="section-header">
+    <text class="section-icon">🪱</text>
+    <text class="section-title">体内驱虫</text>
+    <text class="section-count">{{internalRecords.length}} 条</text>
+  </view>
+  <view wx:if="{{internalRecords.length === 0}}" class="empty-state">
+    <text class="empty-icon">🪱</text>
+    <text class="empty-text">暂无体内驱虫记录</text>
+    <text class="empty-hint">定期驱虫，守护宝贝肠胃健康</text>
+  </view>
+  <view wx:for="{{internalRecords}}" wx:key="id" class="record-card">
+    <view class="record-header">
+      <text class="record-name">{{item.medicine}}</text>
+      <text class="record-status {{item.status}}">{{item.statusText}}</text>
+    </view>
+    <view class="record-body">
+      <view class="record-row">
+        <text class="record-label">用药日期</text>
+        <text class="record-value">{{item.date}}</text>
+      </view>
+      <view class="record-row">
+        <text class="record-label">下次驱虫</text>
+        <text class="record-value">{{item.nextDate}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 体外驱虫 -->
+  <view class="section-header">
+    <text class="section-icon">🧴</text>
+    <text class="section-title">体外驱虫</text>
+    <text class="section-count">{{externalRecords.length}} 条</text>
+  </view>
+  <view wx:if="{{externalRecords.length === 0}}" class="empty-state">
+    <text class="empty-icon">🧴</text>
+    <text class="empty-text">暂无体外驱虫记录</text>
+    <text class="empty-hint">定期驱虫，远离跳蚤和蜱虫</text>
+  </view>
+  <view wx:for="{{externalRecords}}" wx:key="id" class="record-card">
+    <view class="record-header">
+      <text class="record-name">{{item.medicine}}</text>
+      <text class="record-status {{item.status}}">{{item.statusText}}</text>
+    </view>
+    <view class="record-body">
+      <view class="record-row">
+        <text class="record-label">用药日期</text>
+        <text class="record-value">{{item.date}}</text>
+      </view>
+      <view class="record-row">
+        <text class="record-label">下次驱虫</text>
+        <text class="record-value">{{item.nextDate}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view style="height: 140rpx;"></view>
+  </view>
+</scroll-view>
+
+<!-- 底部悬浮按钮 -->
+<view class="fab-btn" bind:tap="showAddSheet">
+  <text class="fab-icon">＋</text>
+</view>
+
+<!-- 添加选择面板 -->
+<view class="sheet-overlay {{showAddSheet ? 'show' : ''}}" bind:tap="hideAddSheet">
+  <view class="sheet-panel" catch:tap="">
+    <view class="sheet-header">
+      <text class="sheet-title">添加驱虫记录</text>
+      <text class="sheet-close" bind:tap="hideAddSheet">✕</text>
+    </view>
+    <view class="action-list">
+      <view class="action-item" bind:tap="addDeworming" data-type="体内">
+        <text class="action-icon">🪱</text>
+        <text class="action-label">添加体内驱虫</text>
+      </view>
+      <view class="action-item" bind:tap="addDeworming" data-type="体外">
+        <text class="action-icon">🧴</text>
+        <text class="action-label">添加体外驱虫</text>
+      </view>
+    </view>
+  </view>
+</view>

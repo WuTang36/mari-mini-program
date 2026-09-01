@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>界面十六：提醒中心 - 宠物健康管家</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.phone-frame {
+  width: 375px;
+  height: 812px;
+  background: #F8F6F2;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  padding: 12px 24px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.nav-bar {
+  padding: 8px 16px 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-back {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background: #fff;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.nav-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2D2D2D;
+  flex: 1;
+}
+
+/* Mark all read - compact bar below nav */
+.mark-all-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 16px;
+  margin: 0 16px 10px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  font-size: 12px;
+  color: #999;
+}
+
+.mark-all-btn {
+  padding: 4px 12px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.mark-all-btn:active { background: #43A047; }
+
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px;
+}
+
+/* Subscribe banner */
+.subscribe-banner {
+  margin: 0 16px 10px;
+  background: linear-gradient(135deg, #FFF8E1, #FFF3E0);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.subscribe-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.subscribe-text {
+  flex: 1;
+}
+
+.subscribe-text strong {
+  display: block;
+  font-size: 14px;
+  color: #2D2D2D;
+  margin-bottom: 2px;
+}
+
+.subscribe-text span {
+  font-size: 11px;
+  color: #BF8F00;
+}
+
+.subscribe-btn {
+  padding: 8px 16px;
+  border-radius: 14px;
+  background: #FF9800;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.subscribe-btn:active { background: #E68900; }
+
+/* Section */
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #999;
+  padding: 0 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #E8E4DC;
+}
+
+/* Reminder cards */
+.reminder-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+}
+
+.reminder-card.unread::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #FF5252;
+}
+
+.reminder-card.read { opacity: 0.6; }
+.reminder-card.read .reminder-title { text-decoration: line-through; color: #BBB; }
+.reminder-card.read .reminder-desc { text-decoration: line-through; }
+
+.reminder-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.reminder-icon.urgent { background: #FFEBEE; }
+.reminder-icon.normal { background: #FFF3E0; }
+.reminder-icon.info { background: #E3F2FD; }
+
+.reminder-info { flex: 1; }
+
+.reminder-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 3px;
+}
+
+.reminder-desc {
+  font-size: 12px;
+  color: #999;
+}
+
+.reminder-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.reminder-badge.today { background: #FFEBEE; color: #D32F2F; }
+.reminder-badge.soon { background: #FFF3E0; color: #E65100; }
+.reminder-badge.upcoming { background: #E3F2FD; color: #1565C0; }
+
+.reminder-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #DDD;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #fff;
+  margin-left: 4px;
+}
+
+.reminder-card.read .reminder-check {
+  background: #4CAF50;
+  border-color: #4CAF50;
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 🔋</span>
+  </div>
+
+  <div class="nav-bar">
+    <button class="nav-back">‹</button>
+    <div class="nav-title">提醒中心</div>
+  </div>
+
+  <div class="subscribe-banner">
+      <span class="subscribe-icon">🔔</span>
+      <div class="subscribe-text">
+        <strong>开启微信提醒</strong>
+        <span>订阅后疫苗/驱虫/生日到期前微信通知你</span>
+      </div>
+      <button class="subscribe-btn">一键订阅</button>
+    </div>
+
+  <div class="mark-all-bar">
+    <span>5 条未读提醒</span>
+    <button class="mark-all-btn" onclick="markAllRead()">全部已读</button>
+  </div>
+
+  <div class="content-scroll">
+
+    <!-- Subscribe Banner -->
+
+    <!-- Today -->
+    <div class="section-title">🔴 今天</div>
+
+    <div class="reminder-card unread" onclick="markRead(this)">
+      <div class="reminder-icon urgent">💉</div>
+      <div class="reminder-info">
+        <div class="reminder-title">花花 · 狂犬疫苗到期</div>
+        <div class="reminder-desc">上次接种：2025-08-15 · 宠爱国际动物医院</div>
+      </div>
+      <span class="reminder-badge today">今天</span>
+      <div class="reminder-check">✓</div>
+    </div>
+
+    <div class="reminder-card unread" onclick="markRead(this)">
+      <div class="reminder-icon urgent">🪱</div>
+      <div class="reminder-info">
+        <div class="reminder-title">花花 · 体内驱虫到期</div>
+        <div class="reminder-desc">上次驱虫：2025-07-15 · 拜耳</div>
+      </div>
+      <span class="reminder-badge today">今天</span>
+      <div class="reminder-check">✓</div>
+    </div>
+
+    <!-- Next 3 days -->
+    <div class="section-title">🟠 未来3天</div>
+
+    <div class="reminder-card unread" onclick="markRead(this)">
+      <div class="reminder-icon normal">🪱</div>
+      <div class="reminder-info">
+        <div class="reminder-title">花花 · 体外驱虫到期</div>
+        <div class="reminder-desc">上次驱虫：2025-08-01 · 大宠爱</div>
+      </div>
+      <span class="reminder-badge soon">2天后</span>
+      <div class="reminder-check">✓</div>
+    </div>
+
+    <div class="reminder-card unread" onclick="markRead(this)">
+      <div class="reminder-icon normal">🎂</div>
+      <div class="reminder-info">
+        <div class="reminder-title">花花 · 4岁生日</div>
+        <div class="reminder-desc">准备好蛋糕和礼物哦～</div>
+      </div>
+      <span class="reminder-badge soon">3天后</span>
+      <div class="reminder-check">✓</div>
+    </div>
+
+    <!-- Next 7 days -->
+    <div class="section-title">🔵 未来7天</div>
+
+    <div class="reminder-card unread" onclick="markRead(this)">
+      <div class="reminder-icon info">💉</div>
+      <div class="reminder-info">
+        <div class="reminder-title">球球 · 猫三联加强针</div>
+        <div class="reminder-desc">上次接种：2025-08-19 · 瑞鹏宠物医院</div>
+      </div>
+      <span class="reminder-badge upcoming">5天后</span>
+      <div class="reminder-check">✓</div>
+    </div>
+
+    <!-- Settled -->
+    <div class="section-title">✅ 已处理</div>
+
+    <div class="reminder-card read">
+      <div class="reminder-icon" style="background:#E8F5E9;">💉</div>
+      <div class="reminder-info">
+        <div class="reminder-title">花花 · 猫三联疫苗</div>
+        <div class="reminder-desc">已于 2026-08-10 完成接种</div>
+      </div>
+      <span class="reminder-badge" style="background:#E8F5E9;color:#4CAF50;">已处理</span>
+      <div class="reminder-check">✓</div>
+    </div>
+
+    <div class="reminder-card read">
+      <div class="reminder-icon" style="background:#E8F5E9;">🎂</div>
+      <div class="reminder-info">
+        <div class="reminder-title">球球 · 3岁生日</div>
+        <div class="reminder-desc">已于 2026-07-20 庆祝</div>
+      </div>
+      <span class="reminder-badge" style="background:#E8F5E9;color:#4CAF50;">已处理</span>
+      <div class="reminder-check">✓</div>
+    </div>
+
+    <div style="padding-bottom: 20px;"></div>
+  </div>
+</div>
+
+<script>
+function markRead(card) {
+  card.classList.remove('unread');
+  card.classList.add('read');
+  updateCount();
+}
+
+function markAllRead() {
+  document.querySelectorAll('.reminder-card.unread').forEach(function(card) {
+    card.classList.remove('unread');
+    card.classList.add('read');
+  });
+  updateCount();
+}
+
+function updateCount() {
+  var count = document.querySelectorAll('.reminder-card.unread').length;
+  document.querySelector('.mark-all-bar span').textContent = count + ' 条未读提醒';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!-- 宠物详情页 -->
+<navigation-bar title="宠物档案" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <!-- 加载失败 / 宠物不存在 -->
+  <view wx:if="{{loadError}}" class="empty-state">
+    <text class="empty-icon">🐾</text>
+    <text class="empty-text">宠物不存在</text>
+    <text class="empty-hint">该宠物可能已被删除，或参数异常</text>
+  </view>
+
+  <block wx:elif="{{loaded}}">
+    <!-- 宠物名片 -->
+    <view class="profile-card">
+      <view class="profile-edit" bind:tap="editPet">编辑</view>
+      <view class="profile-avatar">
+        <image wx:if="{{pet.avatarUrl}}" src="{{pet.avatarUrl}}" mode="aspectFill" binderror="onAvatarError"></image>
+        <image wx:else class="profile-avatar-emoji" src="/Logo.png" mode="aspectFill"></image>
+      </view>
+      <view class="profile-name">{{pet.name}}</view>
+      <view class="profile-meta">
+        <text>{{pet.breed}}</text>
+        <view class="profile-meta-dot"></view>
+        <text class="gender-dot {{pet.gender === '公' ? 'male' : 'female'}}">●</text>
+        <text>{{pet.gender}}</text>
+      </view>
+      <view class="profile-age-badge">🎂 {{pet.ageText}}</view>
+    </view>
+
+    <!-- 健康管理 -->
+    <view class="section-title">📋 健康管理</view>
+    <view class="func-grid">
+      <view class="func-item" bind:tap="goVaccine">
+        <view class="func-icon vaccine">💉</view>
+        <view class="func-info">
+          <view class="func-name">疫苗本</view>
+          <view class="func-desc">最近：{{pet.lastVaccine || '暂无'}}</view>
+        </view>
+        <view wx:if="{{pet.hasVaccineWarning}}" class="func-badge"></view>
+      </view>
+      <view class="func-item" bind:tap="goDeworming">
+        <view class="func-icon deworm">🪱</view>
+        <view class="func-info">
+          <view class="func-name">驱虫记录</view>
+          <view class="func-desc">体内 · 体外</view>
+        </view>
+        <view wx:if="{{pet.hasDewormWarning}}" class="func-badge"></view>
+      </view>
+      <view class="func-item" bind:tap="goWeight">
+        <view class="func-icon weight">⚖️</view>
+        <view class="func-info">
+          <view class="func-name">体重曲线</view>
+          <view class="func-desc">最近：{{pet.lastWeight || '暂无'}}</view>
+        </view>
+      </view>
+      <view class="func-item" bind:tap="goMedical">
+        <view class="func-icon medical">🏥</view>
+        <view class="func-info">
+          <view class="func-name">病史备注</view>
+          <view class="func-desc">{{pet.medicalCount || 0}} 条记录</view>
+        </view>
+      </view>
+      <view class="func-item full-width" bind:tap="goPedigree">
+        <view class="func-icon pedigree">📜</view>
+        <view class="func-info">
+          <view class="func-name">血统信息</view>
+          <view class="func-desc">可选填写 · 证书编号、父母品种、繁育者</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快捷操作 -->
+    <view class="section-title">⚡ 快捷操作</view>
+    <view class="quick-actions">
+      <view class="quick-btn" bind:tap="goDiary">
+        <text class="quick-btn-icon">📸</text>
+        <text class="quick-btn-label">写日记</text>
+      </view>
+      <view class="quick-btn" bind:tap="goReminder">
+        <text class="quick-btn-icon">📋</text>
+        <text class="quick-btn-label">添加提醒</text>
+      </view>
+      <view class="quick-btn" bind:tap="goWeightForm">
+        <text class="quick-btn-icon">⚖️</text>
+        <text class="quick-btn-label">记录体重</text>
+      </view>
+    </view>
+  </block>
+
+  <view style="height: 40rpx;"></view>
+</scroll-view>

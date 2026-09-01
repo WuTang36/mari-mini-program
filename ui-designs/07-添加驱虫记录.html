@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>界面七：添加驱虫记录 - 宠物健康管家</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.phone-frame {
+  width: 375px;
+  height: 812px;
+  background: #F8F6F2;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  padding: 12px 24px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.nav-bar {
+  padding: 8px 16px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-back {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background: #fff;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.nav-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2D2D2D;
+  flex: 1;
+}
+
+.form-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 16px 0;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  margin-bottom: 14px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #F5F2ED;
+  min-height: 48px;
+  cursor: pointer;
+}
+
+.form-row:last-child { border-bottom: none; }
+.form-row.no-click { cursor: default; }
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.form-label.required::after {
+  content: ' *';
+  color: #FF5252;
+  font-size: 12px;
+}
+
+.form-value {
+  flex: 1;
+  font-size: 14px;
+  color: #2D2D2D;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.form-value.placeholder { color: #C8B8A0; }
+
+.form-input {
+  flex: 1;
+  font-size: 14px;
+  color: #2D2D2D;
+  text-align: right;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-input::placeholder { color: #C8B8A0; }
+
+.form-arrow {
+  font-size: 14px;
+  color: #CCC;
+  flex-shrink: 0;
+}
+
+/* Type badge */
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.type-badge.internal {
+  background: #F3E5F5;
+  color: #7B1FA2;
+}
+
+.type-badge.external {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+/* Auto-calc */
+.auto-calc-row {
+  display: none;
+  align-items: center;
+  padding: 0 16px 12px;
+  font-size: 12px;
+  color: #B8A898;
+  gap: 6px;
+}
+
+.auto-calc-row.show { display: flex; }
+
+.auto-calc-link {
+  color: #FF9800;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auto-calc-result {
+  background: #FFF8E1;
+  color: #BF8F00;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.save-section {
+  padding: 20px 0 30px;
+}
+
+.save-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #FF9800, #FFB74D);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 152, 0, 0.3);
+}
+
+.save-btn:active { transform: scale(0.98); opacity: 0.9; }
+
+/* Overlay */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 10;
+}
+
+.overlay.show { display: flex; }
+
+.action-sheet {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  padding: 8px 0 30px;
+}
+
+.action-sheet-title {
+  text-align: center;
+  font-size: 13px;
+  color: #999;
+  padding: 14px 0;
+  border-bottom: 1px solid #F0EDE8;
+}
+
+.action-sheet-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2D2D2D;
+  cursor: pointer;
+  border-bottom: 1px solid #F5F2ED;
+}
+
+.action-sheet-item:active { background: #FAFAFA; }
+
+.action-sheet-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  font-size: 15px;
+  color: #999;
+  cursor: pointer;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Date picker */
+.date-picker-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: flex-end;
+  z-index: 10;
+}
+
+.date-picker-overlay.show { display: flex; }
+
+.date-picker-panel {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  padding: 16px;
+}
+
+.date-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.date-picker-cancel { color: #999; font-size: 14px; cursor: pointer; }
+.date-picker-confirm { color: #FF9800; font-size: 14px; font-weight: 700; cursor: pointer; }
+.date-picker-title { font-size: 15px; font-weight: 700; color: #2D2D2D; }
+
+.date-picker-columns {
+  display: flex;
+  gap: 12px;
+  height: 180px;
+  overflow: hidden;
+}
+
+.date-picker-col {
+  flex: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  text-align: center;
+}
+
+.date-picker-item {
+  padding: 10px 0;
+  font-size: 16px;
+  color: #CCC;
+  scroll-snap-align: center;
+  cursor: pointer;
+}
+
+.date-picker-item.selected {
+  color: #2D2D2D;
+  font-weight: 700;
+  font-size: 18px;
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 🔋</span>
+  </div>
+
+  <div class="nav-bar">
+    <button class="nav-back">‹</button>
+    <div class="nav-title">添加驱虫记录</div>
+  </div>
+
+  <div class="form-scroll">
+    <div class="form-card">
+      <div class="form-row" onclick="document.getElementById('typeSheet').classList.add('show')">
+        <span class="form-label required">驱虫类型</span>
+        <div class="form-value" id="typeValue">
+          <span class="type-badge internal">💊 体内驱虫</span>
+          <span class="form-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="form-row no-click">
+        <span class="form-label required">用药名称</span>
+        <input class="form-input" type="text" placeholder="如：拜耳、大宠爱">
+      </div>
+
+      <div class="form-row" onclick="openDatePicker('dewormDateVal')">
+        <span class="form-label required">用药日期</span>
+        <div class="form-value placeholder" id="dewormDateVal">
+          请选择日期
+          <span class="form-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="form-row" onclick="openDatePicker('nextDateVal')">
+        <span class="form-label required">下次驱虫</span>
+        <div class="form-value placeholder" id="nextDateVal">
+          请选择日期
+          <span class="form-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="auto-calc-row" id="autoCalcRow">
+        <span>💡 下次驱虫</span>
+        <span class="auto-calc-link" id="autoCalcLink" onclick="autoCalcNext()">自动计算</span>
+        <span class="auto-calc-result" id="autoCalcResult" style="display:none;"></span>
+      </div>
+    </div>
+
+    <div class="save-section">
+      <button class="save-btn">💊 保存驱虫记录</button>
+    </div>
+  </div>
+
+  <!-- Type Selector -->
+  <div class="overlay" id="typeSheet" onclick="this.classList.remove('show')">
+    <div class="action-sheet" onclick="event.stopPropagation()">
+      <div class="action-sheet-title">选择驱虫类型</div>
+      <div class="action-sheet-item" onclick="selectType('internal')">💊 体内驱虫</div>
+      <div class="action-sheet-item" onclick="selectType('external')">🧴 体外驱虫</div>
+      <div class="action-sheet-cancel" onclick="document.getElementById('typeSheet').classList.remove('show')">取消</div>
+    </div>
+  </div>
+
+  <!-- Date Picker -->
+  <div class="date-picker-overlay" id="datePicker" onclick="this.classList.remove('show')">
+    <div class="date-picker-panel" onclick="event.stopPropagation()">
+      <div class="date-picker-header">
+        <span class="date-picker-cancel" onclick="document.getElementById('datePicker').classList.remove('show')">取消</span>
+        <span class="date-picker-title">选择日期</span>
+        <span class="date-picker-confirm" onclick="confirmDatePicker()">确定</span>
+      </div>
+      <div class="date-picker-columns">
+        <div class="date-picker-col" id="yearCol"></div>
+        <div class="date-picker-col" id="monthCol"></div>
+        <div class="date-picker-col" id="dayCol"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectType(type) {
+  var val = document.getElementById('typeValue');
+  if (type === 'internal') {
+    val.innerHTML = '<span class="type-badge internal">💊 体内驱虫</span><span class="form-arrow">›</span>';
+  } else {
+    val.innerHTML = '<span class="type-badge external">🧴 体外驱虫</span><span class="form-arrow">›</span>';
+  }
+  document.getElementById('typeSheet').classList.remove('show');
+}
+
+var selYear = 2026, selMonth = 3, selDay = 15;
+var dateTarget = null;
+
+function initDatePicker() {
+  var yc = document.getElementById('yearCol'), mc = document.getElementById('monthCol'), dc = document.getElementById('dayCol');
+  var yhtml = '', mhtml = '', dhtml = '';
+  for (var y = 2030; y >= 2020; y--) yhtml += '<div class="date-picker-item'+(y===selYear?' selected':'')+'" onclick="pickYear('+y+')">'+y+'年</div>';
+  for (var m = 1; m <= 12; m++) mhtml += '<div class="date-picker-item'+(m===selMonth?' selected':'')+'" onclick="pickMonth('+m+')">'+m+'月</div>';
+  for (var d = 1; d <= 31; d++) dhtml += '<div class="date-picker-item'+(d===selDay?' selected':'')+'" onclick="pickDay('+d+')">'+d+'日</div>';
+  yc.innerHTML = yhtml; mc.innerHTML = mhtml; dc.innerHTML = dhtml;
+}
+function pickYear(y) { selYear = y; initDatePicker(); }
+function pickMonth(m) { selMonth = m; initDatePicker(); }
+function pickDay(d) { selDay = d; initDatePicker(); }
+function openDatePicker(targetId) {
+  dateTarget = targetId;
+  document.getElementById('datePicker').classList.add('show');
+}
+function confirmDatePicker() {
+  var val = selYear + '-' + String(selMonth).padStart(2,'0') + '-' + String(selDay).padStart(2,'0');
+  document.getElementById(dateTarget).textContent = val;
+  document.getElementById(dateTarget).classList.remove('placeholder');
+  document.getElementById('datePicker').classList.remove('show');
+  if (dateTarget === 'dewormDateVal') {
+    document.getElementById('autoCalcRow').classList.add('show');
+    document.getElementById('autoCalcLink').style.display = 'inline';
+    document.getElementById('autoCalcResult').style.display = 'none';
+  }
+}
+initDatePicker();
+
+function autoCalcNext() {
+  var dateVal = document.getElementById('dewormDateVal').textContent;
+  if (dateVal === '请选择日期') return;
+  var parts = dateVal.split('-');
+  var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  d.setMonth(d.getMonth() + 3);
+  var next = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  document.getElementById('nextDateVal').textContent = next;
+  document.getElementById('nextDateVal').classList.remove('placeholder');
+  document.getElementById('autoCalcLink').style.display = 'none';
+  document.getElementById('autoCalcResult').textContent = '已计算：' + next;
+  document.getElementById('autoCalcResult').style.display = 'inline';
+}
+</script>
+</body>
+</html>

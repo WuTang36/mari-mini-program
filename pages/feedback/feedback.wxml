@@ -1,0 +1,64 @@
+<!-- 意见反馈 -->
+<navigation-bar title="意见反馈" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="feedback-content">
+    <!-- 顶部提示 -->
+    <view class="tip-banner">
+      <text class="tip-icon">💬</text>
+      <text class="tip-text">欢迎留下您宝贵的意见，我们将尽快查看并处理。预计 1‑3 个工作日回复。</text>
+    </view>
+
+    <!-- 我的反馈记录入口 -->
+    <view class="history-entry" bind:tap="goMyFeedback">
+      <text class="history-entry-icon">📋</text>
+      <view class="history-entry-info">
+        <text class="history-entry-title">我的反馈记录</text>
+        <text class="history-entry-desc">查看我提交过的意见与处理进度</text>
+      </view>
+      <text class="history-entry-arrow">›</text>
+    </view>
+
+    <!-- 表单卡片 -->
+    <view class="form-card">
+      <!-- 反馈内容 -->
+      <view class="form-row desc-row">
+        <text class="form-label required">反馈内容</text>
+        <textarea class="form-textarea" placeholder="请描述您遇到的问题或建议（必填）" value="{{form.content}}" bindinput="onFieldInput" data-field="content" maxlength="500" auto-height/>
+      </view>
+
+      <!-- 截图/录屏 -->
+      <view class="form-row media-row">
+        <text class="form-label">截图/录屏</text>
+        <text class="form-value photo-upload" bind:tap="chooseMedia">上传（最多 3 个）</text>
+      </view>
+
+      <!-- 已选媒体预览 -->
+      <view wx:if="{{media.length > 0}}" class="media-preview">
+        <view wx:for="{{media}}" wx:key="index" class="media-preview-item">
+          <image wx:if="{{item.type === 'image'}}" src="{{item.url}}" mode="aspectFill"></image>
+          <view wx:else class="media-preview-video">
+            <text class="media-preview-video-icon">▶️</text>
+          </view>
+          <view class="media-remove" bind:tap="removeMedia" data-index="{{index}}">✕</view>
+        </view>
+      </view>
+
+      <!-- 联系方式 -->
+      <view class="form-row">
+        <text class="form-label">联系方式</text>
+        <input class="form-input" placeholder="邮箱 / 电话（选填）" value="{{form.contact}}" bindinput="onFieldInput" data-field="contact" maxlength="50"/>
+      </view>
+    </view>
+
+    <!-- 提交 -->
+    <view class="save-section">
+      <view class="btn-primary" bind:tap="submitFeedback">提交反馈</view>
+    </view>
+
+    <!-- 底部隐私提示 -->
+    <view class="privacy-tip">您提交的反馈内容仅用于问题处理，我们将严格保护您的个人信息。</view>
+
+    <view style="height: 40rpx;"></view>
+  </view>
+</scroll-view>

@@ -1,0 +1,40 @@
+<!-- 个人信息编辑 -->
+<navigation-bar title="个人信息" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="profile-content">
+    <!-- 编辑卡片 -->
+    <view class="info-card">
+      <!-- 头像行 -->
+      <view class="edit-row">
+        <text class="info-label">头像</text>
+        <view class="avatar-edit">
+          <button class="avatar-pick" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+            <image wx:if="{{avatarUrl}}" class="avatar-circle" src="{{avatarUrl}}" mode="aspectFill" binderror="onAvatarError"></image>
+            <view wx:else class="avatar-empty">
+              <text class="avatar-empty-icon">👤</text>
+            </view>
+          </button>
+          <text class="avatar-tip">点击更换</text>
+        </view>
+      </view>
+
+      <!-- 昵称行 -->
+      <view class="edit-row">
+        <text class="info-label">昵称</text>
+        <input
+          class="nickname-input"
+          type="nickname"
+          placeholder="请输入昵称"
+          value="{{nickName}}"
+          bindinput="onNicknameInput"
+        />
+      </view>
+    </view>
+
+    <!-- 保存 -->
+    <view class="save-row">
+      <button class="save-btn" bind:tap="onSave">保存</button>
+    </view>
+  </view>
+</scroll-view>

@@ -1,0 +1,46 @@
+<!-- 病史备注列表 -->
+<navigation-bar title="病史备注" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="medical-list-content">
+  <!-- 宠物标识 -->
+  <view class="pet-id-card">
+    <image wx:if="{{pet.avatarUrl}}" class="pet-id-avatar" src="{{pet.avatarUrl}}" mode="aspectFill" binderror="onAvatarError"></image>
+    <image wx:else class="pet-id-emoji" src="/Logo.png" mode="aspectFill"></image>
+    <view class="pet-id-info">
+      <text class="pet-id-name">{{pet.name}}</text>
+      <text class="pet-id-meta">{{pet.breed}} · {{pet.gender}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{records.length === 0}}" class="empty-state">
+    <text class="empty-icon">🏥</text>
+    <text class="empty-text">暂无病史记录</text>
+  </view>
+
+  <!-- 时间线 -->
+  <view class="timeline">
+    <view wx:for="{{records}}" wx:key="id" class="timeline-item">
+      <view class="timeline-left">
+        <view class="timeline-dot"></view>
+        <view class="timeline-line"></view>
+      </view>
+      <view class="timeline-card">
+        <view class="card-header">
+          <text class="card-date">{{item.date}}</text>
+          <text class="card-tag" style="{{item.tagStyle}}">{{item.tag}}</text>
+        </view>
+        <text class="card-title">{{item.title}}</text>
+        <text wx:if="{{item.desc}}" class="card-desc">{{item.desc}}</text>
+        <image wx:if="{{item.photoUrl}}" class="card-thumb" src="{{item.photoUrl}}" mode="aspectFill" bind:tap="previewPhoto" data-url="{{item.photoUrl}}"></image>
+      </view>
+    </view>
+  </view>
+
+  <view style="height: 140rpx;"></view>
+  </view>
+</scroll-view>
+
+<view class="bottom-btn" bind:tap="addRecord">
+  <text class="bottom-btn-text">＋ 添加病史</text>
+</view>

@@ -1,0 +1,153 @@
+<!-- 添加/编辑宠物 -->
+<navigation-bar title="{{isEdit ? '编辑宠物' : '添加宠物'}}" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <!-- 头像上传 -->
+  <view class="avatar-section">
+    <view class="avatar-upload" bind:tap="showAvatarSheet">
+      <image wx:if="{{form.avatarUrl}}" class="avatar-preview" src="{{form.avatarUrl}}" mode="aspectFill" binderror="onAvatarError"></image>
+      <block wx:else>
+        <text class="avatar-upload-icon">📷</text>
+        <text class="avatar-upload-text">上传头像</text>
+      </block>
+    </view>
+  </view>
+
+  <!-- 基本信息 -->
+  <view class="form-card">
+    <view class="form-row">
+      <text class="form-label required">名字</text>
+      <input class="form-input" placeholder="给宝贝取个名字" value="{{form.name}}" bindinput="onNameInput" maxlength="20"/>
+    </view>
+    <view class="form-row" bind:tap="showBreedSheet">
+      <text class="form-label required">品种</text>
+      <text class="form-value {{form.breed ? '' : 'placeholder'}}">{{form.breed || '请选择品种'}}</text>
+      <text class="form-arrow">›</text>
+    </view>
+    <view class="form-row">
+      <text class="form-label required">性别</text>
+      <view class="gender-toggle">
+        <view class="gender-option male {{form.gender === '公' ? 'active' : ''}}" bind:tap="selectGender" data-gender="公"><text class="gender-dot male">●</text> 公</view>
+        <view class="gender-option female {{form.gender === '母' ? 'active' : ''}}" bind:tap="selectGender" data-gender="母"><text class="gender-dot female">●</text> 母</view>
+      </view>
+    </view>
+    <view class="form-row" bind:tap="showDatePicker">
+      <text class="form-label">生日</text>
+      <text class="form-value {{form.birthdayDisplay ? '' : 'placeholder'}}">{{form.birthdayDisplay || '请选择日期'}}</text>
+      <text class="form-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 生日不记得？ -->
+  <view class="birthday-tools">
+    <text class="birthday-tools-label">生日不记得？</text>
+    <view class="birthday-tool-btn {{form.birthdayUnknown ? 'active' : ''}}" bind:tap="setUnknownBirthday">🤷 我不知道</view>
+    <view class="birthday-tool-btn {{form.birthdayEstimate ? 'active' : ''}}" bind:tap="setEstimateAge">📅 估算年龄</view>
+  </view>
+  <!-- 估算年龄输入 -->
+  <view wx:if="{{form.birthdayEstimate}}" class="estimate-age-row">
+    <text class="estimate-age-label">估算年龄</text>
+    <input class="estimate-age-input" type="number" placeholder="0" value="{{form.birthdayEstimateAge}}" bindinput="onEstimateAgeInput" maxlength="2"/>
+    <text class="estimate-age-unit">岁</text>
+  </view>
+
+  <!-- 体重 -->
+  <view class="form-card">
+    <view class="form-row">
+      <text class="form-label">体重</text>
+      <view class="weight-row">
+        <input class="weight-input" type="digit" placeholder="0.00" value="{{form.weight}}" bindinput="onWeightInput" maxlength="6"/>
+        <text class="weight-unit">kg</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="save-section">
+    <view class="btn-primary save-btn" bind:tap="savePet">{{saving ? '保存中...' : '保存'}}</view>
+  </view>
+
+  <view style="height: 40rpx;"></view>
+</scroll-view>
+
+<!-- 品种选择面板 -->
+<view class="sheet-overlay {{showBreedSheet ? 'show' : ''}}">
+  <view class="sheet-panel" catch:tap="">
+    <view class="sheet-header">
+      <text class="sheet-title">选择品种</text>
+      <text class="sheet-close" bind:tap="hideBreedSheet">✕</text>
+    </view>
+    <view class="breed-tabs">
+      <view class="breed-tab {{breedTab === 'cat' ? 'active' : ''}}" catch:tap="switchBreedTab" data-tab="cat">🐱 猫</view>
+      <view class="breed-tab {{breedTab === 'dog' ? 'active' : ''}}" catch:tap="switchBreedTab" data-tab="dog">🐶 狗</view>
+      <view class="breed-tab {{breedTab === 'other' ? 'active' : ''}}" catch:tap="switchBreedTab" data-tab="other">🐹 其他</view>
+    </view>
+    <scroll-view class="breed-list" scroll-y>
+      <view wx:for="{{breedOptions}}" wx:key="*this" class="breed-option {{form.breed === item ? 'selected' : ''}}" bind:tap="selectBreed" data-breed="{{item}}">
+        {{item}}
+        <text wx:if="{{form.breed === item}}" class="breed-check">✓</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>
+
+<!-- 自定义品种弹窗 -->
+<view class="dialog-overlay {{showCustomBreedDialog ? 'show' : ''}}">
+  <view class="dialog-panel" catch:tap="">
+    <view class="dialog-header">
+      <text class="dialog-title">自定义品种</text>
+      <text class="dialog-close" bind:tap="cancelCustomBreed">✕</text>
+    </view>
+    <view class="dialog-body">
+      <input class="dialog-input" placeholder="请输入品种名称" value="{{customBreedInput}}" bindinput="onCustomBreedInput" maxlength="20" focus="{{showCustomBreedDialog}}"/>
+    </view>
+    <view class="dialog-footer">
+      <view class="dialog-btn cancel" bind:tap="cancelCustomBreed">取消</view>
+      <view class="dialog-btn confirm" bind:tap="confirmCustomBreed">确定</view>
+    </view>
+  </view>
+</view>
+
+<!-- 日期选择器：wx:if 每次打开重建，确保默认定位今天 -->
+<view wx:if="{{showDatePicker}}" class="sheet-overlay show">
+  <view class="sheet-panel" catch:tap="">
+    <view class="sheet-header">
+      <text class="sheet-title">选择生日</text>
+      <text class="sheet-close" bind:tap="hideDatePicker">✕</text>
+    </view>
+    <picker-view class="date-picker-view" value="{{datePickerValue}}" bindchange="onDateChange" indicator-style="height: 50px;">
+      <picker-view-column>
+        <view wx:for="{{years}}" wx:key="*this" class="picker-item">{{item}}年</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{months}}" wx:key="*this" class="picker-item">{{item}}月</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{days}}" wx:key="*this" class="picker-item">{{item}}日</view>
+      </picker-view-column>
+    </picker-view>
+    <view class="sheet-footer">
+      <view class="btn-primary" bind:tap="confirmDate">确定</view>
+    </view>
+  </view>
+</view>
+
+<!-- 头像选择面板 -->
+<view class="sheet-overlay {{showAvatarSheet ? 'show' : ''}}">
+  <view class="sheet-panel" catch:tap="">
+    <view class="sheet-header">
+      <text class="sheet-title">设置头像</text>
+      <text class="sheet-close" bind:tap="hideAvatarSheet">✕</text>
+    </view>
+    <view class="action-list">
+      <view class="action-item" bind:tap="takePhoto">
+        <text class="action-icon">📷</text>
+        <text class="action-label">拍照</text>
+      </view>
+      <view class="action-item" bind:tap="chooseFromAlbum">
+        <text class="action-icon">🖼️</text>
+        <text class="action-label">从相册选择</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,45 @@
+<!-- 疫苗本列表 -->
+<navigation-bar title="疫苗本" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="vaccine-list-content">
+  <view wx:if="{{records.length === 0}}" class="empty-state">
+    <text class="empty-icon">💉</text>
+    <text class="empty-text">暂无疫苗记录</text>
+    <text class="empty-hint">记录宝贝的每一次疫苗接种</text>
+  </view>
+
+  <view wx:for="{{records}}" wx:key="id" class="record-card">
+    <view class="record-main">
+      <view class="record-left">
+        <view class="record-header">
+          <text class="record-name">{{item.name}}</text>
+          <text class="record-status {{item.status}}">{{item.statusText}}</text>
+        </view>
+        <view class="record-body">
+          <view class="record-row">
+            <text class="record-label">接种日期</text>
+            <text class="record-value">{{item.date}}</text>
+          </view>
+          <view class="record-row">
+            <text class="record-label">下次到期</text>
+            <text class="record-value">{{item.nextDate}}</text>
+          </view>
+          <view wx:if="{{item.clinic}}" class="record-row">
+            <text class="record-label">接种机构</text>
+            <text class="record-value">{{item.clinic}}</text>
+          </view>
+        </view>
+      </view>
+      <image wx:if="{{item.photoUrl}}" class="record-thumb" src="{{item.photoUrl}}" mode="aspectFill" bind:tap="previewPhoto" data-url="{{item.photoUrl}}"></image>
+    </view>
+  </view>
+
+  <view style="height: 140rpx;"></view>
+  </view>
+</scroll-view>
+
+<!-- 底部按钮 -->
+<view class="bottom-btn" bind:tap="addRecord">
+  <text class="bottom-btn-text">＋ 添加疫苗记录</text>
+</view>

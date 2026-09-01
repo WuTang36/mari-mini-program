@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>界面十二：血统信息 - 宠物健康管家</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.phone-frame {
+  width: 375px;
+  height: 812px;
+  background: #F8F6F2;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  padding: 12px 24px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.nav-bar {
+  padding: 8px 16px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-back {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background: #fff;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.nav-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2D2D2D;
+  flex: 1;
+}
+
+.form-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 16px 0;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  margin-bottom: 14px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #F5F2ED;
+  min-height: 48px;
+  cursor: pointer;
+}
+
+.form-row:last-child { border-bottom: none; }
+.form-row.no-click { cursor: default; }
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.form-value {
+  flex: 1;
+  font-size: 14px;
+  color: #2D2D2D;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.form-value.placeholder { color: #C8B8A0; }
+
+.form-input {
+  flex: 1;
+  font-size: 14px;
+  color: #2D2D2D;
+  text-align: right;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-input::placeholder { color: #C8B8A0; }
+
+.form-arrow { font-size: 14px; color: #CCC; flex-shrink: 0; }
+
+.photo-section { padding: 14px 16px; }
+
+.photo-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.photo-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.photo-thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  background: #F5F2ED;
+  border: 1.5px dashed #D8D0C4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #C8B8A0;
+  cursor: pointer;
+}
+
+.photo-hint { font-size: 12px; color: #B8A898; line-height: 1.5; }
+
+.info-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  background: #FFF8E1;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #BF8F00;
+  line-height: 1.5;
+}
+
+.info-banner-icon { font-size: 16px; flex-shrink: 0; }
+
+.save-section { padding: 20px 0 30px; }
+
+.save-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #FF9800, #FFB74D);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 152, 0, 0.3);
+}
+
+.save-btn:active { transform: scale(0.98); opacity: 0.9; }
+
+/* Overlay */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 10;
+}
+
+.overlay.show { display: flex; }
+
+.action-sheet {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  padding: 0 0 30px;
+  max-height: 65%;
+  overflow-y: auto;
+}
+
+.action-sheet-title {
+  text-align: center;
+  font-size: 13px;
+  color: #999;
+  padding: 14px 0;
+  border-bottom: 1px solid #F0EDE8;
+}
+
+.breed-tabs {
+  display: flex;
+  padding: 12px 20px 0;
+  gap: 0;
+}
+
+.breed-tab {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 10px 10px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #999;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.breed-tab.active {
+  background: #fff;
+  color: #FF9800;
+  border-bottom: 2px solid #FF9800;
+}
+
+.breed-group { padding: 8px 0 0; }
+
+.action-sheet-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  font-size: 15px;
+  color: #2D2D2D;
+  cursor: pointer;
+  border-bottom: 1px solid #F5F2ED;
+}
+
+.action-sheet-item:active { background: #FAFAFA; }
+
+.action-sheet-item .check {
+  color: #FF9800;
+  font-weight: 700;
+  display: none;
+}
+
+.action-sheet-item.selected .check { display: inline; }
+.action-sheet-item.selected { color: #FF9800; }
+
+.action-sheet-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  font-size: 15px;
+  color: #999;
+  cursor: pointer;
+  margin-top: 8px;
+  font-weight: 500;
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 🔋</span>
+  </div>
+
+  <div class="nav-bar">
+    <button class="nav-back">‹</button>
+    <div class="nav-title">血统信息</div>
+  </div>
+
+  <div class="form-scroll">
+    <div class="info-banner">
+      <span class="info-banner-icon">💡</span>
+      <span>血统信息暂支持输入，更多功能敬请期待～</span>
+    </div>
+
+    <div class="form-card">
+      <div class="form-row no-click">
+        <span class="form-label">血统证书编号</span>
+        <input class="form-input" type="text" placeholder="选填">
+      </div>
+
+      <div class="form-row" onclick="openBreedSheet('father')">
+        <span class="form-label">父亲品种</span>
+        <div class="form-value placeholder" id="fatherValue">
+          请选择品种
+          <span class="form-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="form-row" onclick="openBreedSheet('mother')">
+        <span class="form-label">母亲品种</span>
+        <div class="form-value placeholder" id="motherValue">
+          请选择品种
+          <span class="form-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="form-row no-click" style="border-bottom:none;">
+        <span class="form-label">繁育者/犬舍</span>
+        <input class="form-input" type="text" placeholder="选填，如：XX猫舍">
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="photo-section">
+        <div class="photo-label">血统证书照片</div>
+        <div class="photo-upload">
+          <div class="photo-thumb">📷</div>
+          <div class="photo-hint">拍照上传血统证书<br>支持 JPG/PNG，≤10MB</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="save-section">
+      <button class="save-btn">📜 保存血统信息</button>
+    </div>
+  </div>
+
+  <!-- Breed Selector -->
+  <div class="overlay" id="breedSheet" onclick="this.classList.remove('show')">
+    <div class="action-sheet" onclick="event.stopPropagation()">
+      <div class="action-sheet-title">选择品种</div>
+      <div class="breed-tabs">
+        <button class="breed-tab active" onclick="switchBreedTab(this, 'cat')">🐱 猫</button>
+        <button class="breed-tab" onclick="switchBreedTab(this, 'dog')">🐶 狗</button>
+      </div>
+
+      <div class="breed-group" id="breedCat">
+        <div class="action-sheet-item" onclick="selectBreed('英国短毛猫')">英国短毛猫 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('美国短毛猫')">美国短毛猫 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('布偶猫')">布偶猫 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('暹罗猫')">暹罗猫 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('缅因猫')">缅因猫 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('波斯猫')">波斯猫 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('中华田园猫')">中华田园猫 <span class="check">✓</span></div>
+      </div>
+
+      <div class="breed-group" id="breedDog" style="display:none">
+        <div class="action-sheet-item" onclick="selectBreed('金毛寻回犬')">金毛寻回犬 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('拉布拉多')">拉布拉多 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('柯基犬')">柯基犬 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('泰迪/贵宾')">泰迪/贵宾 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('柴犬')">柴犬 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('边境牧羊犬')">边境牧羊犬 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('哈士奇')">哈士奇 <span class="check">✓</span></div>
+        <div class="action-sheet-item" onclick="selectBreed('萨摩耶')">萨摩耶 <span class="check">✓</span></div>
+      </div>
+
+      <div class="action-sheet-cancel" onclick="document.getElementById('breedSheet').classList.remove('show')">取消</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var breedTarget = '';
+
+function switchBreedTab(btn, type) {
+  document.querySelectorAll('.breed-tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('breedCat').style.display = type === 'cat' ? 'block' : 'none';
+  document.getElementById('breedDog').style.display = type === 'dog' ? 'block' : 'none';
+}
+
+function openBreedSheet(target) {
+  breedTarget = target;
+  document.getElementById('breedSheet').classList.add('show');
+  document.querySelectorAll('#breedSheet .action-sheet-item').forEach(function(i) { i.classList.remove('selected'); });
+}
+
+function selectBreed(name) {
+  var targetId = breedTarget === 'father' ? 'fatherValue' : 'motherValue';
+  var el = document.getElementById(targetId);
+  el.textContent = name;
+  el.classList.remove('placeholder');
+  document.querySelectorAll('#breedSheet .action-sheet-item').forEach(function(i) { i.classList.remove('selected'); });
+  event.target.closest('.action-sheet-item').classList.add('selected');
+  setTimeout(function() { document.getElementById('breedSheet').classList.remove('show'); }, 200);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+}
+
+.page-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.profile-content {
+  padding: 32rpx;
+}
+
+/* 编辑卡片：上下两行布局 */
+.info-card {
+  box-sizing: border-box;
+  background: var(--color-card);
+  border-radius: 24rpx;
+  padding: 16rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 48rpx;
+}
+
+.edit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  min-height: 128rpx;
+  border-bottom: 2rpx solid var(--color-border);
+}
+
+.edit-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* 头像编辑 */
+.avatar-edit {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.avatar-pick {
+  position: relative;
+  width: 80rpx;
+  height: 80rpx;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 40rpx;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  overflow: visible;
+  line-height: 1;
+}
+
+.avatar-pick::after {
+  border: none;
+}
+
+.avatar-circle {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  display: block;
+}
+
+.avatar-empty {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  background: linear-gradient(135deg, #FFE0B2, #FFCC80);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-empty-icon {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.avatar-tip {
+  font-size: 22rpx;
+  color: var(--color-text-hint);
+}
+
+/* 昵称输入框 */
+.nickname-input {
+  flex: 1;
+  height: 80rpx;
+  font-size: 30rpx;
+  color: var(--color-text);
+  background: #F5F3EF;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+}
+
+/* 保存按钮 */
+.save-row {
+  padding: 0 16rpx;
+}
+
+.save-btn {
+  width: 100%;
+  height: 88rpx;
+  background: #FF9800;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: 44rpx;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save-btn::after {
+  border: none;
+}

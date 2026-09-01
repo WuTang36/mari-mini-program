@@ -1,0 +1,19 @@
+# 微信开发者工具本地私有配置（不上传、不入库）
+project.private.config.json
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# Node 依赖（云函数部署时云端安装，不入库）
+node_modules/
+cloudfunctions/**/node_modules/
+
+# npm 构建产物
+miniprogram_npm/
+
+# 日志
+*.log
+
+# 微信代码质量分析产物（临时文件）
+analyse-data.json

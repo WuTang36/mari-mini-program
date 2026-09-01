@@ -1,0 +1,99 @@
+<!-- 成长相册 -->
+<navigation-bar title="成长相册" back="{{false}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<!-- 顶部固定区：宠物选择 + 类型筛选 -->
+<view class="album-header">
+  <view class="album-header-inner">
+    <!-- 宠物选择器 - 用普通 view + overflow-x 替代嵌套 scroll-view -->
+    <view class="pet-selector-wrap">
+      <view class="pet-selector">
+        <view wx:for="{{pets}}" wx:key="_id" class="pet-chip {{selectedPetId === item._id ? 'active' : ''}}" bind:tap="selectPet" data-id="{{item._id}}">
+          <image wx:if="{{item.avatarUrl}}" class="pet-chip-avatar" src="{{item.avatarUrl}}" mode="aspectFill" binderror="onAvatarError" data-index="{{index}}"></image>
+          <image wx:else class="pet-chip-emoji" src="/Logo.png" mode="aspectFill"></image>
+          <text class="pet-chip-name">{{item.name}}</text>
+          <text wx:if="{{item.isDeleted}}" class="chip-archived-tag">已删</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 筛选器 -->
+    <view class="filter-bar">
+      <view wx:for="{{filters}}" wx:key="*this" class="filter-item {{currentFilter === item ? 'active' : ''}}" bind:tap="setFilter" data-filter="{{item}}">
+        {{item}}
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 可滚动内容区 -->
+<scroll-view class="page-scroll" scroll-y bindscrolltolower="loadMore" lower-threshold="100">
+  <view class="album-content">
+    <!-- 时间线 -->
+    <view class="timeline">
+      <block wx:for="{{groupedDiaries}}" wx:key="month">
+        <view class="timeline-month">{{item.month}}</view>
+        <view wx:for="{{item.items}}" wx:for-item="diary" wx:key="id" class="timeline-item">
+          <view class="timeline-left">
+            <view class="timeline-dot"></view>
+            <view class="timeline-line"></view>
+          </view>
+          <view class="timeline-card">
+            <!-- 照片卡片 -->
+            <view wx:if="{{diary.type === 'photo'}}" class="photo-card">
+              <image wx:if="{{diary.media && diary.media.length > 0}}" class="photo-img" src="{{diary.media[0]}}" mode="aspectFill" bind:tap="previewDiaryMedia" data-url="{{diary.media[0]}}"></image>
+              <view wx:else class="photo-placeholder" style="background: {{diary.color || '#FFE0B2'}};">
+                <text class="photo-emoji">{{diary.emoji || '🐾'}}</text>
+              </view>
+              <view wx:if="{{diary.tag}}" class="photo-tag">{{diary.tag}}</view>
+            </view>
+            <!-- 视频卡片：用视频首帧做封面 -->
+            <view wx:if="{{diary.type === 'video'}}" class="video-card" bind:tap="previewDiaryVideo" data-url="{{diary.media[0]}}">
+              <video
+                wx:if="{{diary.videoUrl || diary.media[0]}}"
+                class="video-cover"
+                src="{{diary.videoUrl || diary.media[0]}}"
+                controls="{{false}}"
+                autoplay="{{false}}"
+                show-center-play-btn="{{false}}"
+                object-fit="cover"
+              ></video>
+              <view wx:else class="video-placeholder" style="background: {{diary.color || '#BBDEFB'}};">
+                <text class="video-icon">▶️</text>
+              </view>
+              <view wx:if="{{diary.tag}}" class="photo-tag">{{diary.tag}}</view>
+            </view>
+            <!-- 日记卡片 -->
+            <view wx:if="{{diary.type === 'diary'}}" class="diary-card">
+              <text class="diary-text">{{diary.content}}</text>
+              <view wx:if="{{diary.tag}}" class="diary-tag">{{diary.tag}}</view>
+            </view>
+            <view class="timeline-date">{{diary.date}}</view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{allDiaries.length === 0 && !loading}}" class="empty-state">
+      <text class="empty-icon">📸</text>
+      <text class="empty-text">还没有成长记录</text>
+      <text class="empty-hint">记录宝贝的每一个精彩瞬间吧～</text>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{loading}}" class="load-more">
+      <text class="load-more-text">加载中…</text>
+    </view>
+    <view wx:elif="{{!hasMore && allDiaries.length > 0}}" class="load-more">
+      <text class="load-more-text">— 没有更多了 —</text>
+    </view>
+
+    <view style="height: 40rpx;"></view>
+  </view>
+</scroll-view>
+
+<!-- 底部固定写日记按钮 -->
+<view class="fab-btn" bind:tap="goDiary">
+  <text class="fab-icon">＋</text>
+  <text class="fab-label">写日记</text>
+</view>

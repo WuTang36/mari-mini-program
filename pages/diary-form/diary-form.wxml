@@ -1,0 +1,110 @@
+<!-- 写日记 -->
+<navigation-bar title="写日记" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="form-card">
+    <!-- 宠物（必选） -->
+    <view class="form-row pet-row">
+      <text class="form-label required">宠物</text>
+      <view wx:if="{{pets.length > 0}}" class="pet-selector">
+        <view
+          wx:for="{{pets}}"
+          wx:key="_id"
+          class="pet-chip {{petId === item._id ? 'active' : ''}}"
+          bind:tap="selectPet"
+          data-id="{{item._id}}"
+        >
+          <image wx:if="{{item.avatarUrl}}" class="pet-chip-avatar" src="{{item.avatarUrl}}" mode="aspectFill" binderror="onAvatarError" data-index="{{index}}"></image>
+          <image wx:else class="pet-chip-emoji" src="/Logo.png" mode="aspectFill"></image>
+          <text class="pet-chip-name">{{item.name}}</text>
+        </view>
+      </view>
+      <view wx:else class="pet-empty">
+        <text class="pet-empty-text">暂无宠物，请先添加</text>
+      </view>
+    </view>
+
+    <!-- 日期 -->
+    <view class="form-row" bind:tap="showDatePicker">
+      <text class="form-label">日期</text>
+      <text class="form-value">{{form.date}}</text>
+      <text class="form-arrow">›</text>
+    </view>
+
+    <!-- 文字内容 -->
+    <view class="form-row desc-row">
+      <text class="form-label required">内容</text>
+      <textarea class="form-textarea" placeholder="记录宝贝的成长瞬间..." value="{{form.content}}" bindinput="onFieldInput" data-field="content" auto-height maxlength="500"/>
+    </view>
+
+    <!-- 照片/视频 -->
+    <view class="form-row media-row">
+      <text class="form-label">照片/视频</text>
+      <view class="media-actions">
+        <view class="media-action-btn" bind:tap="chooseFromAlbum">
+          <text class="media-action-icon">🖼️</text>
+          <text class="media-action-label">从相册选择</text>
+        </view>
+        <view class="media-action-btn" bind:tap="takePhoto">
+          <text class="media-action-icon">📷</text>
+          <text class="media-action-label">拍摄</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 已选媒体预览 -->
+    <view wx:if="{{form.media.length > 0}}" class="media-preview">
+      <view wx:for="{{form.media}}" wx:key="index" class="media-preview-item">
+        <image wx:if="{{item.type === 'image'}}" src="{{item.url}}" mode="aspectFill"></image>
+        <view wx:else class="media-preview-video">
+          <text class="media-preview-video-icon">▶️</text>
+        </view>
+        <view class="media-remove" bind:tap="removeMedia" data-index="{{index}}">✕</view>
+      </view>
+    </view>
+
+    <!-- 标签 -->
+    <view class="form-row tag-row">
+      <text class="form-label">标签</text>
+      <view class="tag-select">
+        <view wx:for="{{milestoneTags}}" wx:key="*this" class="tag-option {{form.customTag === item ? 'active' : ''}}" bind:tap="fillTag" data-tag="{{item}}">{{item}}</view>
+      </view>
+    </view>
+
+    <!-- 自定义标签 -->
+    <view class="form-row">
+      <text class="form-label">自定义</text>
+      <input class="form-input" placeholder="输入自定义标签" value="{{form.customTag}}" bindinput="onFieldInput" data-field="customTag"/>
+    </view>
+  </view>
+
+  <view class="save-section">
+    <view class="btn-primary" bind:tap="saveDiary">保存</view>
+  </view>
+
+  <view style="height: 40rpx;"></view>
+</scroll-view>
+
+<!-- 日期选择器 -->
+<view wx:if="{{showDatePicker}}" class="sheet-overlay show" bind:tap="hideDatePicker">
+  <view class="sheet-panel" catch:tap="">
+    <view class="sheet-header">
+      <text class="sheet-title">选择日期</text>
+      <text class="sheet-close" bind:tap="hideDatePicker">✕</text>
+    </view>
+    <picker-view class="date-picker-view" value="{{datePickerValue}}" bindchange="onDateChange" indicator-style="height: 50px;">
+      <picker-view-column>
+        <view wx:for="{{years}}" wx:key="*this" class="picker-item">{{item}}年</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{months}}" wx:key="*this" class="picker-item">{{item}}月</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{days}}" wx:key="*this" class="picker-item">{{item}}日</view>
+      </picker-view-column>
+    </picker-view>
+    <view class="sheet-footer">
+      <view class="btn-primary" bind:tap="confirmDate">确定</view>
+    </view>
+  </view>
+</view>

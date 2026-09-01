@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>界面一：宠物首页 - 宠物健康管家</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.phone-frame {
+  width: 375px;
+  height: 812px;
+  background: #F8F6F2;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  padding: 12px 24px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.header {
+  padding: 8px 20px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #2D2D2D;
+}
+
+.header-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.header-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  background: #fff;
+  border: none;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: #FF5252;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.reminder-section {
+  padding: 0 16px;
+  margin-bottom: 12px;
+}
+
+.reminder-bar {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  cursor: pointer;
+  border: 1px solid #F0EDE8;
+}
+
+.reminder-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.reminder-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #E65100;
+  flex: 1;
+}
+
+.reminder-count span {
+  color: #FF9800;
+}
+
+.reminder-hint {
+  font-size: 11px;
+  color: #B8A898;
+  margin-right: 4px;
+}
+
+.reminder-arrow {
+  font-size: 16px;
+  color: #CCC;
+  flex-shrink: 0;
+}
+
+.pet-list {
+  flex: 1;
+  padding: 0 16px;
+  overflow-y: auto;
+}
+
+.pet-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  cursor: pointer;
+  transition: transform 0.15s;
+  position: relative;
+}
+
+.pet-card:active {
+  transform: scale(0.985);
+}
+
+.pet-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #FFE0B2, #FFCC80);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.pet-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pet-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.pet-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 4px;
+}
+
+.pet-meta {
+  font-size: 12px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pet-meta-dot {
+  width: 3px;
+  height: 3px;
+  background: #DDD;
+  border-radius: 50%;
+}
+
+.pet-arrow {
+  font-size: 16px;
+  color: #CCC;
+  flex-shrink: 0;
+}
+
+.pet-status {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.status-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.status-tag.warning {
+  background: #FFF3E0;
+  color: #E65100;
+}
+
+.status-tag.ok {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.add-pet-btn {
+  background: #fff;
+  border: 2px dashed #E0D8CC;
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #B8A898;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.guide-banner {
+  background: linear-gradient(135deg, #FF9800, #FFB74D);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(255, 152, 0, 0.25);
+  cursor: pointer;
+}
+
+.guide-emoji {
+  font-size: 36px;
+  flex-shrink: 0;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.guide-content {
+  flex: 1;
+}
+
+.guide-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.guide-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.85);
+}
+
+.guide-action {
+  background: #fff;
+  color: #FF9800;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.tab-bar {
+  display: flex;
+  background: #fff;
+  border-top: 1px solid #F0EDE8;
+  padding: 8px 0 20px;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  position: relative;
+}
+
+.tab-icon {
+  font-size: 22px;
+}
+
+.tab-label {
+  font-size: 10px;
+  color: #999;
+  font-weight: 500;
+}
+
+.tab-item.active .tab-label {
+  color: #FF9800;
+  font-weight: 700;
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 🔋</span>
+  </div>
+
+  <div class="header">
+    <div class="header-title">🐾 我的宠物</div>
+    <div class="header-actions">
+      <button class="header-btn" title="提醒中心">
+        🔔
+        <span class="badge"></span>
+      </button>
+      <button class="header-btn" title="设置">⚙️</button>
+    </div>
+  </div>
+
+  <div class="reminder-section">
+    <div class="reminder-bar">
+      <div class="reminder-icon">🔔</div>
+      <div class="reminder-count"><span>2</span> 条待处理提醒</div>
+      <div class="reminder-hint">查看详情</div>
+      <div class="reminder-arrow">›</div>
+    </div>
+  </div>
+
+  <div class="pet-list">
+    <div class="guide-banner">
+      <div class="guide-emoji">🐱</div>
+      <div class="guide-content">
+        <div class="guide-title">添加你的第一只宠物吧</div>
+        <div class="guide-sub">记录它的每一次成长 🐾</div>
+      </div>
+      <div class="guide-action">去添加</div>
+    </div>
+
+    <div class="pet-card">
+      <div class="pet-avatar">🐱</div>
+      <div class="pet-info">
+        <div class="pet-name">花花</div>
+        <div class="pet-meta">
+          <span>三花猫</span>
+          <span class="pet-meta-dot"></span>
+          <span>♀ 母</span>
+          <span class="pet-meta-dot"></span>
+          <span>2岁3个月</span>
+        </div>
+        <div class="pet-status">
+          <span class="status-tag warning">疫苗即将到期</span>
+          <span class="status-tag ok">驱虫已完成</span>
+        </div>
+      </div>
+      <div class="pet-arrow">›</div>
+    </div>
+
+    <div class="pet-card">
+      <div class="pet-avatar">🐈</div>
+      <div class="pet-info">
+        <div class="pet-name">小橘</div>
+        <div class="pet-meta">
+          <span>橘猫</span>
+          <span class="pet-meta-dot"></span>
+          <span>♂ 公</span>
+          <span class="pet-meta-dot"></span>
+          <span>1岁6个月</span>
+        </div>
+        <div class="pet-status">
+          <span class="status-tag warning">驱虫即将到期</span>
+        </div>
+      </div>
+      <div class="pet-arrow">›</div>
+    </div>
+
+    <div class="add-pet-btn">
+      <span>＋</span> 添加宠物
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-item active">
+      <div class="tab-icon">🐾</div>
+      <div class="tab-label">宠物</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">📸</div>
+      <div class="tab-label">相册</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">👤</div>
+      <div class="tab-label">我的</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

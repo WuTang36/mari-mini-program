@@ -1,0 +1,483 @@
+page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+}
+
+.page-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.avatar-section {
+  display: flex;
+  justify-content: center;
+  padding: 40rpx 0 32rpx;
+}
+
+.avatar-upload {
+  width: 176rpx;
+  height: 176rpx;
+  border-radius: 88rpx;
+  background: #F0EDE8;
+  border: 4rpx dashed #D8D0C4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  overflow: hidden;
+}
+
+.avatar-upload-icon {
+  font-size: 56rpx;
+  color: #C8B8A0;
+  line-height: 1;
+}
+
+.avatar-upload-text {
+  font-size: 20rpx;
+  color: #B8A898;
+}
+
+.avatar-preview {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.form-card {
+  margin: 0 56rpx;
+  background: var(--color-card);
+  border-radius: 32rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.03);
+  margin-bottom: 28rpx;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 36rpx;
+  border-bottom: 2rpx solid var(--color-border);
+  min-height: 96rpx;
+}
+
+.form-row:last-child {
+  border-bottom: none;
+}
+
+.form-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  width: 112rpx;
+  flex-shrink: 0;
+}
+
+.form-label.required::after {
+  content: ' *';
+  color: var(--color-danger);
+  font-size: 24rpx;
+}
+
+.form-value {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--color-text);
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12rpx;
+}
+
+.form-value.placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.form-input {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  color: var(--color-text);
+  text-align: right;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.form-arrow {
+  font-size: 28rpx;
+  color: #CCC;
+  flex-shrink: 0;
+}
+
+/* 性别选择 */
+.gender-toggle {
+  display: flex;
+  gap: 16rpx;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.gender-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 12rpx 32rpx;
+  border-radius: 32rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  border: 3rpx solid var(--color-divider);
+  background: var(--color-card);
+  color: var(--color-text-hint);
+  line-height: 1;
+}
+
+.gender-option.female.active {
+  background: #FCE4EC;
+  border-color: #EC407A;
+  color: #EC407A;
+}
+
+.gender-option.male.active {
+  background: #E3F2FD;
+  border-color: #42A5F5;
+  color: #42A5F5;
+}
+
+.gender-option .gender-dot {
+  font-size: 20rpx;
+  line-height: 1;
+  margin-right: 4rpx;
+}
+
+.gender-option .gender-dot.male {
+  color: #42A5F5;
+}
+
+.gender-option .gender-dot.female {
+  color: #EC407A;
+}
+
+/* 生日工具 */
+.birthday-tools {
+  padding: 0 56rpx 28rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.birthday-tools-label {
+  font-size: 24rpx;
+  color: #B8A898;
+  flex-shrink: 0;
+}
+
+.birthday-tool-btn {
+  font-size: 22rpx;
+  padding: 8rpx 24rpx;
+  border-radius: 24rpx;
+  background: #FFF8E1;
+  color: #BF8F00;
+  font-weight: 600;
+}
+
+.birthday-tool-btn.active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* 估算年龄 */
+.estimate-age-row {
+  padding: 0 56rpx 28rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.estimate-age-label {
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.estimate-age-input {
+  width: 100rpx;
+  height: 64rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--color-text);
+  background: var(--color-card);
+  border: 2rpx solid var(--color-border);
+  border-radius: 16rpx;
+}
+
+.estimate-age-unit {
+  font-size: 26rpx;
+  color: #888;
+}
+
+/* 体重 */
+.weight-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.weight-input {
+  width: 120rpx;
+  text-align: right;
+  font-size: 28rpx;
+  color: var(--color-text);
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.weight-unit {
+  font-size: 26rpx;
+  color: #888;
+  font-weight: 600;
+}
+
+/* 保存按钮 */
+.save-section {
+  margin: 0 56rpx;
+  padding: 24rpx 0 80rpx;
+}
+
+.save-btn {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 28rpx;
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === 底部弹出面板（品种、日期、头像） === */
+/* overlay 不绑定关闭事件，只能通过面板内按钮关闭 */
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.sheet-overlay.show {
+  display: flex;
+}
+
+.sheet-panel {
+  box-sizing: border-box;
+  width: 100%;
+  background: #fff;
+  border-radius: 40rpx 40rpx 0 0;
+  padding: 0 0 40rpx;
+  max-height: 600rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 36rpx 40rpx 24rpx;
+}
+
+.sheet-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.sheet-close {
+  font-size: 36rpx;
+  color: #CCC;
+  padding: 8rpx;
+}
+
+.breed-tabs {
+  display: flex;
+  padding: 0 40rpx 20rpx;
+  gap: 0;
+}
+
+.breed-tab {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--color-text-hint);
+  border-bottom: 4rpx solid transparent;
+}
+
+.breed-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.breed-list {
+  max-height: 400rpx;
+  padding: 0 40rpx;
+}
+
+.breed-option {
+  padding: 28rpx 0;
+  font-size: 28rpx;
+  color: var(--color-text);
+  border-bottom: 2rpx solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.breed-option.selected {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.breed-check {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* 日期选择器 */
+.date-picker-view {
+  box-sizing: border-box;
+  width: 100%;
+  height: 400rpx;
+}
+
+.picker-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  font-size: 28rpx;
+  color: var(--color-text);
+}
+
+.sheet-footer {
+  padding: 0 40rpx;
+}
+
+.action-list {
+  display: flex;
+  padding: 20rpx 40rpx 40rpx;
+  gap: 40rpx;
+}
+
+.action-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  padding: 32rpx;
+  background: var(--color-bg);
+  border-radius: 24rpx;
+}
+
+.action-icon {
+  font-size: 56rpx;
+}
+
+.action-label {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+/* === 居中弹窗（自定义品种） === */
+/* overlay 不绑定关闭事件，只能通过取消/确定关闭 */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1010;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-overlay.show {
+  display: flex;
+}
+
+.dialog-panel {
+  box-sizing: border-box;
+  width: 560rpx;
+  background: #fff;
+  border-radius: 32rpx;
+  overflow: hidden;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 36rpx 40rpx 20rpx;
+}
+
+.dialog-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.dialog-close {
+  font-size: 36rpx;
+  color: #CCC;
+  padding: 8rpx;
+}
+
+.dialog-body {
+  padding: 20rpx 40rpx 32rpx;
+}
+
+.dialog-input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 88rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border-radius: 20rpx;
+  border: 2rpx solid var(--color-border);
+}
+
+.dialog-footer {
+  display: flex;
+  border-top: 2rpx solid var(--color-border);
+}
+
+.dialog-btn {
+  flex: 1;
+  text-align: center;
+  padding: 32rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.dialog-btn.cancel {
+  color: #999;
+  border-right: 2rpx solid var(--color-border);
+}
+
+.dialog-btn.confirm {
+  color: var(--color-primary);
+}

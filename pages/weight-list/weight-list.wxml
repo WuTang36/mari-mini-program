@@ -1,0 +1,56 @@
+<!-- 体重曲线 -->
+<navigation-bar title="体重曲线" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="weight-list-content">
+    <!-- 宠物标识 -->
+    <view class="pet-id-card" wx:if="{{pet.name}}">
+      <image wx:if="{{pet.avatarUrl}}" class="pet-id-avatar" src="{{pet.avatarUrl}}" mode="aspectFill" binderror="onAvatarError"></image>
+        <image wx:else class="pet-id-emoji" src="/Logo.png" mode="aspectFill"></image>
+      <view class="pet-id-info">
+        <text class="pet-id-name">{{pet.name}}</text>
+        <text class="pet-id-meta">{{pet.breed}} · {{pet.gender}}</text>
+      </view>
+    </view>
+
+    <!-- Tab 切换（有数据时显示） -->
+    <view class="chart-tabs" wx:if="{{records.length > 0}}">
+      <view wx:for="{{periods}}" wx:key="*this" class="chart-tab {{currentPeriod === item ? 'active' : ''}}" bind:tap="switchPeriod" data-period="{{item}}">{{item}}</view>
+    </view>
+
+    <!-- 折线图区域 -->
+    <view class="chart-area">
+      <!-- 空态 -->
+      <view wx:if="{{records.length === 0 && !loading}}" class="empty-state">
+        <text class="empty-icon">📈</text>
+        <text class="empty-text">暂无体重数据</text>
+        <text class="empty-hint">记录宝贝的体重变化，跟踪健康成长</text>
+      </view>
+      <!-- 加载中 -->
+      <view wx:elif="{{loading}}" class="chart-placeholder">
+        <text class="chart-placeholder-icon">⏳</text>
+        <text class="chart-placeholder-text">加载中…</text>
+      </view>
+      <!-- 有数据：Canvas 图表 -->
+      <canvas wx:else type="2d" id="weightCanvas" class="chart-canvas"></canvas>
+    </view>
+
+    <!-- 体重记录列表 -->
+    <view class="weight-list">
+      <view class="list-title">记录列表</view>
+      <view wx:if="{{records.length === 0 && !loading}}" class="empty-list">
+        <text class="empty-list-text">点击下方按钮，记录第一笔体重吧～</text>
+      </view>
+      <view wx:for="{{displayRecords}}" wx:key="date" class="weight-item">
+        <text class="weight-date">{{item.date}}</text>
+        <text class="weight-value">{{item.weight}} kg</text>
+      </view>
+    </view>
+
+    <view style="height: 140rpx;"></view>
+  </view>
+</scroll-view>
+
+<view class="bottom-btn" bind:tap="addWeight">
+  <text class="bottom-btn-text">＋ 记录体重</text>
+</view>

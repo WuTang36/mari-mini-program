@@ -1,0 +1,61 @@
+<!-- 提醒中心 -->
+<navigation-bar title="提醒中心" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="reminder-center-content">
+  <!-- 订阅横幅（未订阅） -->
+  <view wx:if="{{!subscribed}}" class="subscribe-banner">
+    <view class="subscribe-left">
+      <text class="subscribe-icon">📢</text>
+      <view class="subscribe-content">
+        <text class="subscribe-title">订阅提醒，不错过重要日期</text>
+        <text class="subscribe-desc">微信服务通知及时推送</text>
+      </view>
+    </view>
+    <view class="subscribe-btn" bind:tap="subscribeReminder">订阅</view>
+  </view>
+
+  <!-- 取消订阅横幅（已订阅） -->
+  <view wx:else class="subscribe-banner subscribed">
+    <view class="subscribe-left">
+      <text class="subscribe-icon">✅</text>
+      <view class="subscribe-content">
+        <text class="subscribe-title subscribed">已开启订阅提醒</text>
+        <text class="subscribe-desc">疫苗 / 驱虫 / 生日提醒准时送达</text>
+      </view>
+    </view>
+    <view class="subscribe-btn cancel" bind:tap="cancelSubscribe">取消订阅</view>
+  </view>
+
+  <!-- 全部已读 -->
+  <view wx:if="{{reminders.length > 0}}" class="read-all-bar">
+    <view class="read-all-btn" bind:tap="markAllRead">全部已读 ✓</view>
+  </view>
+
+  <!-- 提醒列表 -->
+  <view wx:if="{{reminders.length > 0}}" class="reminder-list">
+    <view wx:for="{{reminders}}" wx:key="id" class="reminder-item {{item.read ? 'read' : ''}}" bind:tap="toggleRead" data-id="{{item.id}}">
+      <view class="reminder-item-left">
+        <text class="reminder-item-icon">{{item.icon}}</text>
+        <view class="reminder-item-info">
+          <text class="reminder-item-title {{item.read ? 'strikethrough' : ''}}">{{item.petName}} · {{item.title}}</text>
+          <text class="reminder-item-desc {{item.read ? 'strikethrough' : ''}}">{{item.desc}}</text>
+        </view>
+      </view>
+      <view class="reminder-item-right">
+        <text class="reminder-item-date">{{item.dueDate}}</text>
+        <view wx:if="{{!item.read}}" class="unread-dot"></view>
+        <text wx:else class="read-check">✓</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:else class="empty-state">
+    <text class="empty-icon">🎉</text>
+    <text class="empty-text">暂无提醒</text>
+  </view>
+
+  <view style="height: 40rpx;"></view>
+  </view>
+</scroll-view>

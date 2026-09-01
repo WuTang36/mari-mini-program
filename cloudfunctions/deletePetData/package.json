@@ -1,0 +1,9 @@
+{
+  "name": "deletePetData",
+  "version": "1.0.0",
+  "description": "删除宠物及可选级联删除日记",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

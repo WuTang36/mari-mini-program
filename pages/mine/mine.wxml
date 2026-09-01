@@ -1,0 +1,72 @@
+<!-- 我的 -->
+<navigation-bar title="我的" back="{{false}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="mine-content">
+    <!-- 用户卡片：未登录点击触发登录 -->
+    <view class="user-card" bind:tap="onCardTap">
+      <view class="user-avatar">
+        <image wx:if="{{userInfo.avatarUrl}}" class="avatar-img" src="{{userInfo.avatarUrl}}" mode="aspectFill" binderror="onAvatarError"></image>
+        <text wx:else class="avatar-placeholder">👤</text>
+      </view>
+
+      <view class="user-info">
+        <text wx:if="{{isLoggedIn}}" class="user-name">{{userInfo.nickName}}</text>
+        <text wx:else class="user-name-placeholder">点击登录</text>
+        <text class="user-desc">已陪伴 {{petCount}} 只小可爱</text>
+      </view>
+
+      <view wx:if="{{isLoggedIn}}" class="logout-btn" bind:tap="logout">退出</view>
+    </view>
+
+    <!-- 菜单 -->
+    <view class="menu-card">
+      <view class="menu-item" bind:tap="goReminderCenter">
+        <text class="menu-icon">🔔</text>
+        <text class="menu-label">提醒中心</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bind:tap="goProfileEdit">
+        <text class="menu-icon">👤</text>
+        <text class="menu-label">个人信息</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bind:tap="showAbout">
+        <text class="menu-icon">ℹ️</text>
+        <text class="menu-label">关于我们</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bind:tap="goFeedback">
+        <text class="menu-icon">💬</text>
+        <text class="menu-label">意见反馈</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="version">
+      <text>Mari v1.0.0</text>
+    </view>
+
+    <view style="height: 40rpx;"></view>
+  </view>
+</scroll-view>
+
+<!-- 关于我们弹窗 -->
+<view wx:if="{{showAbout}}" class="about-overlay" bind:tap="hideAbout">
+  <view class="about-panel" catch:tap="">
+    <view class="about-close" bind:tap="hideAbout">✕</view>
+    <image class="about-logo-img" src="/Logo.png" mode="aspectFit"></image>
+    <view class="about-title">Mari</view>
+    <view class="about-desc">
+      <view class="about-desc-line">一只专为铲屎官打造的养宠小助手：</view>
+      <view class="about-desc-line">疫苗、驱虫、体重、病史，统统帮你记</view>
+      <view class="about-desc-line">生日、到期提醒，准时送达不缺席</view>
+      <view class="about-desc-line">毛孩子的健康，咱们一起守护～</view>
+    </view>
+    <view class="about-wechat">
+      <text class="about-wechat-label">想交流养宠心得？欢迎添加微信：</text>
+      <text class="about-wechat-id" user-select>@hoshinochiri</text>
+    </view>
+    <view class="about-btn" bind:tap="hideAbout">我知道了</view>
+  </view>
+</view>

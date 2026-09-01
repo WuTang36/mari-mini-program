@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>界面三：添加宠物 - 宠物健康管家</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.phone-frame {
+  width: 375px;
+  height: 812px;
+  background: #F8F6F2;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Nav Bar ---- */
+.nav-bar {
+  padding: 12px 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-back {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background: #fff;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.nav-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2D2D2D;
+  flex: 1;
+}
+
+  font-size: 14px;
+  font-weight: 700;
+  color: #FF9800;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+/* ---- Scrollable Content ---- */
+.form-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 0;
+}
+
+/* ---- Avatar Upload ---- */
+.avatar-section {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0 16px;
+}
+
+.avatar-upload {
+  width: 88px;
+  height: 88px;
+  border-radius: 44px;
+  background: #F0EDE8;
+  border: 2px dashed #D8D0C4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  position: relative;
+}
+
+.avatar-upload-icon {
+  font-size: 28px;
+  color: #C8B8A0;
+  line-height: 1;
+}
+
+.avatar-upload-text {
+  font-size: 10px;
+  color: #B8A898;
+}
+
+/* ---- Form Card ---- */
+.form-card {
+  margin-left: 28px;
+  margin-right: 28px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  margin-bottom: 14px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 16px 18px;
+  border-bottom: 1px solid #F5F2ED;
+  min-height: 48px;
+  cursor: pointer;
+}
+
+.form-row:last-child {
+  border-bottom: none;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  width: 56px;
+  flex-shrink: 0;
+}
+
+.form-label.required::after {
+  content: ' *';
+  color: #FF5252;
+  font-size: 12px;
+}
+
+.form-value {
+  flex: 1;
+  font-size: 14px;
+  color: #2D2D2D;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.form-value.placeholder {
+  color: #C8B8A0;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 14px;
+  color: #2D2D2D;
+  text-align: right;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-input::placeholder {
+  color: #C8B8A0;
+}
+
+.form-arrow {
+  font-size: 14px;
+  color: #CCC;
+  flex-shrink: 0;
+}
+
+/* Gender toggle */
+.gender-toggle {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.gender-option {
+  padding: 6px 16px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid #E8E4DC;
+  background: #fff;
+  color: #999;
+  transition: all 0.2s;
+}
+
+.gender-option.female.active {
+  background: #FCE4EC;
+  border-color: #EC407A;
+  color: #EC407A;
+}
+
+.gender-option.male.active {
+  background: #E3F2FD;
+  border-color: #42A5F5;
+  color: #42A5F5;
+}
+
+/* ---- Birthday tools row ---- */
+.birthday-tools {
+  padding: 10px 16px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.birthday-tools-label {
+  font-size: 12px;
+  color: #B8A898;
+  flex-shrink: 0;
+}
+
+.birthday-tool-btn {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: #FFF8E1;
+  color: #BF8F00;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.birthday-tool-btn.active {
+  background: #FF9800;
+  color: #fff;
+}
+
+/* Weight row */
+.weight-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.weight-input {
+  width: 60px;
+  text-align: right;
+  font-size: 14px;
+  color: #2D2D2D;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: inherit;
+}
+
+.weight-input::placeholder {
+  color: #C8B8A0;
+}
+
+.weight-unit {
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+}
+
+.weight-unit.active {
+  color: #FF9800;
+  font-weight: 700;
+}
+
+/* ---- Save Button ---- */
+.save-section {
+  margin-left: 28px;
+  margin-right: 28px;
+  padding: 24px 0 40px;
+}
+
+.save-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #FF9800, #FFB74D);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 152, 0, 0.3);
+}
+
+.save-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* ---- Overlay ---- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 10;
+}
+
+.overlay.show {
+  display: flex;
+}
+
+.action-sheet {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  padding: 8px 0 30px;
+  max-height: 60%;
+  overflow-y: auto;
+}
+
+.action-sheet-title {
+  text-align: center;
+  font-size: 13px;
+  color: #999;
+  padding: 14px 0;
+  border-bottom: 1px solid #F0EDE8;
+}
+
+.action-sheet-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2D2D2D;
+  cursor: pointer;
+  border-bottom: 1px solid #F5F2ED;
+}
+
+.action-sheet-item:active {
+  background: #FAFAFA;
+}
+
+.action-sheet-item.selected {
+  color: #FF9800;
+  background: #FFF8E1;
+}
+
+.action-sheet-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  font-size: 15px;
+  color: #999;
+  cursor: pointer;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Breed picker: category tabs */
+.breed-tabs {
+  display: flex;
+  gap: 0;
+  padding: 16px 0;
+  border-bottom: 1px solid #F0EDE8;
+}
+
+.breed-tab {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #999;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.breed-tab.active {
+  color: #FF9800;
+  border-bottom-color: #FF9800;
+}
+
+.breed-list {
+  padding: 16px 0;
+}
+
+.breed-option {
+  padding: 14px 0;
+  font-size: 14px;
+  color: #2D2D2D;
+  cursor: pointer;
+  border-bottom: 1px solid #F5F2ED;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.breed-option:active {
+  color: #FF9800;
+}
+
+.breed-option .check {
+  color: #FF9800;
+  font-weight: 700;
+  display: none;
+}
+
+.breed-option.selected .check {
+  display: inline;
+}
+
+/* Date picker overlay */
+.date-picker-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: flex-end;
+  z-index: 10;
+}
+
+.date-picker-overlay.show {
+  display: flex;
+}
+
+.date-picker-panel {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  padding: 16px;
+}
+
+.date-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.date-picker-cancel {
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.date-picker-confirm {
+  color: #FF9800;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.date-picker-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #2D2D2D;
+}
+
+.date-picker-columns {
+  display: flex;
+  gap: 12px;
+  height: 180px;
+  overflow: hidden;
+}
+
+.date-picker-col {
+  flex: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  text-align: center;
+}
+
+.date-picker-item {
+  padding: 10px 0;
+  font-size: 16px;
+  color: #CCC;
+  scroll-snap-align: center;
+  cursor: pointer;
+}
+
+.date-picker-item.selected {
+  color: #2D2D2D;
+  font-weight: 700;
+  font-size: 18px;
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="nav-bar">
+    <button class="nav-back">‹</button>
+    <div class="nav-title">添加宠物</div>
+  </div>
+
+  <div class="form-scroll">
+    <!-- Avatar -->
+    <div class="avatar-section">
+      <div class="avatar-upload" onclick="document.getElementById('avatarSheet').classList.add('show')">
+        <div class="avatar-upload-icon">📷</div>
+        <div class="avatar-upload-text">上传头像</div>
+      </div>
+    </div>
+
+    <!-- Basic Info -->
+    <div class="form-card">
+      <div class="form-row" style="cursor:default;">
+        <span class="form-label required">名字</span>
+        <input class="form-input" type="text" placeholder="给宝贝取个名字" maxlength="20">
+      </div>
+
+      <div class="form-row" onclick="document.getElementById('breedSheet').classList.add('show')">
+        <span class="form-label required">品种</span>
+        <div class="form-value placeholder" id="breedValue">
+          请选择品种
+          <span class="form-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="form-row" style="cursor:default;">
+        <span class="form-label required">性别</span>
+        <div class="gender-toggle" id="genderToggle">
+          <span class="gender-option male active" onclick="selectGender('male', this)">♂ 公</span>
+          <span class="gender-option female" onclick="selectGender('female', this)">♀ 母</span>
+        </div>
+      </div>
+
+      <div class="form-row" onclick="document.getElementById('datePicker').classList.add('show')">
+        <span class="form-label">生日</span>
+        <div class="form-value placeholder" id="birthdayValue">
+          请选择日期
+          <span class="form-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="birthday-tools">
+        <span class="birthday-tools-label">生日不记得？</span>
+        <button class="birthday-tool-btn" onclick="setUnknownBirthday(this)">🤷 我不知道</button>
+        <button class="birthday-tool-btn" onclick="setEstimateAge(this)">📅 估算年龄</button>
+      </div>
+
+      <div class="form-row" style="cursor:default;">
+        <span class="form-label">体重</span>
+        <div class="weight-input-row">
+          <input class="weight-input" type="number" placeholder="0.0" step="0.1" min="0" oninput="if(this.value<0)this.value=0">
+          <span class="weight-unit active">kg</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save -->
+    <div class="save-section">
+      <button class="save-btn">🐾 保存宠物信息</button>
+    </div>
+  </div>
+
+  <!-- Avatar Action Sheet -->
+  <div class="overlay" id="avatarSheet" onclick="this.classList.remove('show')">
+    <div class="action-sheet" onclick="event.stopPropagation()">
+      <div class="action-sheet-title">选择头像</div>
+      <div class="action-sheet-item">📷 拍照</div>
+      <div class="action-sheet-item">🖼️ 从手机相册选择</div>
+      <div class="action-sheet-cancel" onclick="document.getElementById('avatarSheet').classList.remove('show')">取消</div>
+    </div>
+  </div>
+
+  <!-- Breed Action Sheet -->
+  <div class="overlay" id="breedSheet" onclick="this.classList.remove('show')">
+    <div class="action-sheet" onclick="event.stopPropagation()">
+      <div class="action-sheet-title">选择品种</div>
+      <div class="breed-tabs">
+        <span class="breed-tab active" onclick="switchBreedTab('cat', this)">🐱 猫</span>
+        <span class="breed-tab" onclick="switchBreedTab('dog', this)">🐶 狗</span>
+        <span class="breed-tab" onclick="switchBreedTab('other', this)">🐾 其他</span>
+      </div>
+      <div class="breed-list" id="breedList">
+        <div class="breed-option" onclick="selectBreed('布偶猫')">布偶猫 <span class="check">✓</span></div>
+        <div class="breed-option" onclick="selectBreed('英短')">英短 <span class="check">✓</span></div>
+        <div class="breed-option" onclick="selectBreed('美短')">美短 <span class="check">✓</span></div>
+        <div class="breed-option" onclick="selectBreed('暹罗猫')">暹罗猫 <span class="check">✓</span></div>
+        <div class="breed-option" onclick="selectBreed('波斯猫')">波斯猫 <span class="check">✓</span></div>
+        <div class="breed-option" onclick="selectBreed('缅因猫')">缅因猫 <span class="check">✓</span></div>
+        <div class="breed-option" onclick="selectBreed('三花猫')">三花猫 <span class="check">✓</span></div>
+        <div class="breed-option" onclick="selectBreed('橘猫')">橘猫 <span class="check">✓</span></div>
+        <div class="breed-option" onclick="selectBreed('狸花猫')">狸花猫 <span class="check">✓</span></div>
+        <div class="breed-option" onclick="selectBreed('德文卷毛猫')">德文卷毛猫 <span class="check">✓</span></div>
+        <div class="breed-option" onclick="selectBreed('其他猫')">其他猫 <span class="check">✓</span></div>
+      </div>
+      <div class="action-sheet-cancel" onclick="document.getElementById('breedSheet').classList.remove('show')">取消</div>
+    </div>
+  </div>
+
+  <!-- Date Picker -->
+  <div class="date-picker-overlay" id="datePicker" onclick="this.classList.remove('show')">
+    <div class="date-picker-panel" onclick="event.stopPropagation()">
+      <div class="date-picker-header">
+        <span class="date-picker-cancel" onclick="document.getElementById('datePicker').classList.remove('show')">取消</span>
+        <span class="date-picker-title">选择生日</span>
+        <span class="date-picker-confirm" onclick="confirmDate()">确定</span>
+      </div>
+      <div class="date-picker-columns">
+        <div class="date-picker-col" id="yearCol"></div>
+        <div class="date-picker-col" id="monthCol"></div>
+        <div class="date-picker-col" id="dayCol"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Gender toggle
+function selectGender(gender, el) {
+  document.querySelectorAll('.gender-option').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Breed selection
+function selectBreed(name) {
+  const val = document.getElementById('breedValue');
+  val.textContent = name;
+  val.classList.remove('placeholder');
+  document.querySelectorAll('#breedList .breed-option').forEach(o => o.classList.remove('selected'));
+  event.target.closest('.breed-option').classList.add('selected');
+  setTimeout(() => document.getElementById('breedSheet').classList.remove('show'), 200);
+}
+
+function switchBreedTab(type, el) {
+  document.querySelectorAll('.breed-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const cats = ['布偶猫','英短','美短','暹罗猫','波斯猫','缅因猫','三花猫','橘猫','狸花猫','德文卷毛猫','其他猫'];
+  const dogs = ['金毛','拉布拉多','柯基','柴犬','泰迪','比熊','哈士奇','萨摩耶','边牧','法斗','其他狗'];
+  const others = ['兔子','仓鼠','龙猫','鹦鹉','乌龟','其他'];
+  let list = type === 'cat' ? cats : type === 'dog' ? dogs : others;
+  document.getElementById('breedList').innerHTML = list.map(b =>
+    '<div class="breed-option" onclick="selectBreed(\'' + b + '\')">' + b + ' <span class="check">✓</span></div>'
+  ).join('');
+}
+
+// Birthday tools
+function setUnknownBirthday(btn) {
+  btn.classList.toggle('active');
+  const val = document.getElementById('birthdayValue');
+  if (btn.classList.contains('active')) {
+    val.textContent = '未知';
+    val.classList.remove('placeholder');
+    document.querySelectorAll('.birthday-tool-btn').forEach(b => { if(b !== btn) b.classList.remove('active'); });
+  } else {
+    val.textContent = '请选择日期';
+    val.classList.add('placeholder');
+  }
+}
+
+function setEstimateAge(btn) {
+  btn.classList.toggle('active');
+  const val = document.getElementById('birthdayValue');
+  if (btn.classList.contains('active')) {
+    val.textContent = '估算年龄';
+    val.classList.remove('placeholder');
+    document.querySelectorAll('.birthday-tool-btn').forEach(b => { if(b !== btn) b.classList.remove('active'); });
+  } else {
+    val.textContent = '请选择日期';
+    val.classList.add('placeholder');
+  }
+}
+
+// Date picker
+let selYear = 2024, selMonth = 6, selDay = 15;
+function initDatePicker() {
+  const yc = document.getElementById('yearCol');
+  const mc = document.getElementById('monthCol');
+  const dc = document.getElementById('dayCol');
+  let yhtml = '', mhtml = '', dhtml = '';
+  for (let y = 2026; y >= 2010; y--) {
+    yhtml += '<div class="date-picker-item' + (y === selYear ? ' selected' : '') + '" onclick="pickYear('+y+')">'+y+'年</div>';
+  }
+  for (let m = 1; m <= 12; m++) {
+    mhtml += '<div class="date-picker-item' + (m === selMonth ? ' selected' : '') + '" onclick="pickMonth('+m+')">'+m+'月</div>';
+  }
+  for (let d = 1; d <= 31; d++) {
+    dhtml += '<div class="date-picker-item' + (d === selDay ? ' selected' : '') + '" onclick="pickDay('+d+')">'+d+'日</div>';
+  }
+  yc.innerHTML = yhtml; mc.innerHTML = mhtml; dc.innerHTML = dhtml;
+}
+function pickYear(y) { selYear = y; initDatePicker(); }
+function pickMonth(m) { selMonth = m; initDatePicker(); }
+function pickDay(d) { selDay = d; initDatePicker(); }
+function confirmDate() {
+  document.getElementById('birthdayValue').textContent = selYear + '年' + selMonth + '月' + selDay + '日';
+  document.getElementById('birthdayValue').classList.remove('placeholder');
+  document.querySelectorAll('.birthday-tool-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('datePicker').classList.remove('show');
+}
+initDatePicker();
+
+// Weight unit
+function switchWeightUnit(unit, el) {
+  document.querySelectorAll('.weight-unit').forEach(u => u.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

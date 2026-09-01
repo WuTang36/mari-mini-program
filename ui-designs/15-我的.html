@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>界面十五：我的 - 宠物健康管家</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.phone-frame {
+  width: 375px;
+  height: 812px;
+  background: #F8F6F2;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  padding: 12px 24px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.nav-bar {
+  padding: 8px 16px 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2D2D2D;
+  flex: 1;
+}
+
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 16px 0;
+}
+
+/* Profile card */
+.profile-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.profile-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #FFF3E0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.profile-info { flex: 1; }
+
+.profile-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 4px;
+}
+
+.profile-id {
+  font-size: 12px;
+  color: #BBB;
+}
+
+.profile-arrow {
+  font-size: 14px;
+  color: #CCC;
+}
+
+/* Stats */
+.stats-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.stat-card {
+  flex: 1;
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.stat-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: #FF9800;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* Menu cards */
+.menu-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  margin-bottom: 14px;
+}
+
+.menu-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #F5F2ED;
+  cursor: pointer;
+  min-height: 48px;
+}
+
+.menu-row:last-child { border-bottom: none; }
+
+.menu-icon {
+  font-size: 18px;
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.menu-label {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2D2D2D;
+}
+
+.menu-value {
+  font-size: 13px;
+  color: #BBB;
+  margin-right: 4px;
+}
+
+.menu-arrow {
+  font-size: 14px;
+  color: #CCC;
+  flex-shrink: 0;
+}
+
+.menu-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #FF5252;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
+
+.tab-bar {
+  display: flex;
+  background: #fff;
+  border-top: 1px solid #F0EDE8;
+  padding: 8px 0 20px;
+  margin-top: auto;
+}
+
+.tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
+.tab-icon { font-size: 22px; }
+.tab-label { font-size: 10px; color: #999; font-weight: 500; }
+.tab-item.active .tab-label { color: #FF9800; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 🔋</span>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-title">我的</div>
+  </div>
+
+  <div class="content-scroll">
+
+    <!-- Profile -->
+    <div class="profile-card">
+      <div class="profile-avatar">🐱</div>
+      <div class="profile-info">
+        <div class="profile-name">铲屎官小琳</div>
+        <div class="profile-id">ID: petpal_2026</div>
+      </div>
+      <div class="profile-arrow">›</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num">2</div>
+        <div class="stat-label">我的宠物</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">12</div>
+        <div class="stat-label">成长日记</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5</div>
+        <div class="stat-label">待处理提醒</div>
+      </div>
+    </div>
+
+    <!-- Reminder settings -->
+    <div class="menu-card">
+      <div class="menu-row">
+        <span class="menu-icon">🔔</span>
+        <span class="menu-label">提醒设置</span>
+        <span class="menu-arrow">›</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-icon">📋</span>
+        <span class="menu-label">订阅消息管理</span>
+        <span class="menu-arrow">›</span>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <div class="menu-card">
+      <div class="menu-row">
+        <span class="menu-icon">☁️</span>
+        <span class="menu-label">云存储空间</span>
+        <span class="menu-value">128MB / 1GB</span>
+        <span class="menu-arrow">›</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-icon">📤</span>
+        <span class="menu-label">数据导出</span>
+        <span class="menu-arrow">›</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-icon">🗑️</span>
+        <span class="menu-label">清除缓存</span>
+        <span class="menu-value">36.8MB</span>
+        <span class="menu-arrow">›</span>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="menu-card">
+      <div class="menu-row">
+        <span class="menu-icon">💬</span>
+        <span class="menu-label">意见反馈</span>
+        <span class="menu-arrow">›</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-icon">⭐</span>
+        <span class="menu-label">给我们评分</span>
+        <span class="menu-arrow">›</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-icon">ℹ️</span>
+        <span class="menu-label">关于宠物健康管家</span>
+        <span class="menu-value">v1.0.0</span>
+        <span class="menu-arrow">›</span>
+      </div>
+    </div>
+
+    <div style="padding-bottom: 20px;"></div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-item">
+      <div class="tab-icon">🐾</div>
+      <div class="tab-label">宠物</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">📸</div>
+      <div class="tab-label">相册</div>
+    </div>
+    <div class="tab-item active">
+      <div class="tab-icon">👤</div>
+      <div class="tab-label">我的</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

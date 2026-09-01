@@ -1,0 +1,53 @@
+<!-- 血统证书预览 -->
+<navigation-bar title="血统证书" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="preview-content">
+    <!-- 空状态 -->
+    <view wx:if="{{loaded && !hasPedigree}}" class="empty-state">
+      <text class="empty-icon">📜</text>
+      <text class="empty-text">尚未填写血统信息</text>
+      <text class="empty-hint">填写后可生成血统证书预览</text>
+      <view class="empty-btn" bind:tap="goEdit">去填写</view>
+    </view>
+
+    <!-- 证书卡片 -->
+    <block wx:if="{{hasPedigree}}">
+      <view class="cert-card">
+        <view class="cert-header">
+          <image wx:if="{{pet.avatarUrl}}" class="cert-avatar" src="{{pet.avatarUrl}}" mode="aspectFill" binderror="onAvatarError"></image>
+          <image wx:else class="cert-avatar-emoji" src="/Logo.png" mode="aspectFill"></image>
+          <view class="cert-pet-info">
+            <text class="cert-pet-name">{{pet.name}}</text>
+            <text class="cert-title">血统证书</text>
+          </view>
+        </view>
+
+        <view class="cert-body">
+          <view class="cert-row">
+            <text class="cert-label">证书编号</text>
+            <text class="cert-value">{{pedigree.certNo}}</text>
+          </view>
+          <view class="cert-row">
+            <text class="cert-label">父亲品种</text>
+            <text class="cert-value">{{pedigree.fatherBreed}}</text>
+          </view>
+          <view class="cert-row">
+            <text class="cert-label">母亲品种</text>
+            <text class="cert-value">{{pedigree.motherBreed}}</text>
+          </view>
+          <view wx:if="{{pedigree.breeder}}" class="cert-row">
+            <text class="cert-label">繁育者</text>
+            <text class="cert-value">{{pedigree.breeder}}</text>
+          </view>
+        </view>
+
+        <image wx:if="{{pedigree.certPhoto}}" class="cert-photo" src="{{pedigree.certPhoto}}" mode="aspectFill" bind:tap="previewPhoto"></image>
+      </view>
+
+      <view class="edit-btn" bind:tap="goEdit">
+        <text>编辑血统信息</text>
+      </view>
+    </block>
+  </view>
+</scroll-view>

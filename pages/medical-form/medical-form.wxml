@@ -1,0 +1,59 @@
+<!-- 添加病史 -->
+<navigation-bar title="添加病史" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="form-card">
+    <view class="form-row" bind:tap="showDatePicker">
+      <text class="form-label required">日期</text>
+      <text class="form-value {{form.date ? '' : 'placeholder'}}">{{form.date || '请选择日期'}}</text>
+      <text class="form-arrow">›</text>
+    </view>
+    <view class="form-row">
+      <text class="form-label required">标题</text>
+      <input class="form-input" placeholder="如：左后腿跛行" value="{{form.title}}" bindinput="onFieldInput" data-field="title"/>
+    </view>
+    <view class="form-row">
+      <text class="form-label">标签</text>
+      <view class="tag-select">
+        <view wx:for="{{tagOptions}}" wx:key="*this" class="tag-option {{form.tag === item ? 'active' : ''}}" bind:tap="selectTag" data-tag="{{item}}">{{item}}</view>
+      </view>
+    </view>
+    <view class="form-row desc-row">
+      <text class="form-label">详细描述</text>
+      <textarea class="form-textarea" placeholder="选填，描述症状、诊断、治疗过程等" value="{{form.desc}}" bindinput="onFieldInput" data-field="desc" auto-height/>
+    </view>
+    <view class="form-row">
+      <text class="form-label">附件照片</text>
+      <text class="form-value photo-upload" bind:tap="uploadPhoto">{{form.photoUrl ? '已上传' : '点击上传'}}</text>
+      <text class="form-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="save-section">
+    <view class="btn-primary" bind:tap="saveRecord">保存</view>
+  </view>
+</scroll-view>
+
+<!-- 日期选择器 -->
+<view wx:if="{{showDatePicker}}" class="sheet-overlay show" bind:tap="hideDatePicker">
+  <view class="sheet-panel" catch:tap="">
+    <view class="sheet-header">
+      <text class="sheet-title">选择日期</text>
+      <text class="sheet-close" bind:tap="hideDatePicker">✕</text>
+    </view>
+    <picker-view class="date-picker-view" value="{{datePickerValue}}" bindchange="onDateChange" indicator-style="height: 50px;">
+      <picker-view-column>
+        <view wx:for="{{years}}" wx:key="*this" class="picker-item">{{item}}年</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{months}}" wx:key="*this" class="picker-item">{{item}}月</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{days}}" wx:key="*this" class="picker-item">{{item}}日</view>
+      </picker-view-column>
+    </picker-view>
+    <view class="sheet-footer">
+      <view class="btn-primary" bind:tap="confirmDate">确定</view>
+    </view>
+  </view>
+</view>

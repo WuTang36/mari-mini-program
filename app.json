@@ -1,0 +1,66 @@
+{
+  "cloud": true,
+  "renderer": "skyline",
+  "rendererOptions": {
+    "skyline": {
+      "defaultDisplayBlock": true,
+      "defaultContentBox": true
+    }
+  },
+  "componentFramework": "glass-easel",
+  "pages": [
+    "pages/index/index",
+    "pages/pet-detail/pet-detail",
+    "pages/pet-form/pet-form",
+    "pages/vaccine-list/vaccine-list",
+    "pages/vaccine-form/vaccine-form",
+    "pages/deworming-list/deworming-list",
+    "pages/deworming-form/deworming-form",
+    "pages/weight-list/weight-list",
+    "pages/weight-form/weight-form",
+    "pages/medical-list/medical-list",
+    "pages/medical-form/medical-form",
+    "pages/pedigree/pedigree",
+    "pages/pedigree-preview/pedigree-preview",
+    "pages/album/album",
+    "pages/diary-form/diary-form",
+    "pages/mine/mine",
+    "pages/feedback/feedback",
+    "pages/my-feedback/my-feedback",
+    "pages/reminder-center/reminder-center",
+    "pages/profile-edit/profile-edit"
+  ],
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#FF9800",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "宠物",
+        "iconPath": "images/tab-pet.png",
+        "selectedIconPath": "images/tab-pet-active.png"
+      },
+      {
+        "pagePath": "pages/album/album",
+        "text": "相册",
+        "iconPath": "images/tab-album.png",
+        "selectedIconPath": "images/tab-album-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "images/tab-mine.png",
+        "selectedIconPath": "images/tab-mine-active.png"
+      }
+    ]
+  },
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

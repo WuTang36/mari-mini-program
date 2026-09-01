@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>界面十三：成长相册 - 宠物健康管家</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.phone-frame {
+  width: 375px;
+  height: 812px;
+  background: #F8F6F2;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  padding: 12px 24px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.nav-bar {
+  padding: 8px 16px 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2D2D2D;
+  flex: 1;
+}
+
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px;
+}
+
+/* Pet age banner */
+.age-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  margin: 10px 0;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  font-size: 13px;
+  color: #888;
+}
+
+.age-banner strong {
+  font-size: 18px;
+  color: #FF9800;
+  font-weight: 800;
+}
+
+/* Filter tabs */
+.filter-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.filter-tab {
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #999;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.filter-tab.active {
+  background: #FF9800;
+  color: #fff;
+}
+
+/* Month group */
+.month-group {
+  margin-bottom: 16px;
+}
+
+.month-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #999;
+  padding: 0 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.month-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #E8E4DC;
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #E8E4DC;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -23px;
+  top: 14px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #FF9800;
+  z-index: 1;
+}
+
+/* Photo card */
+.photo-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  cursor: pointer;
+}
+
+.photo-card-img {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, #FFE0B2, #FFCC80);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  position: relative;
+}
+
+.photo-card-img.purple { background: linear-gradient(135deg, #E1BEE7, #CE93D8); }
+.photo-card-img.blue { background: linear-gradient(135deg, #BBDEFB, #90CAF9); }
+.photo-card-img.green { background: linear-gradient(135deg, #C8E6C9, #A5D6A7); }
+
+.photo-card-play {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+}
+
+.photo-card-footer {
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.photo-card-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.photo-card-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  background: #FFF8E1;
+  color: #BF8F00;
+}
+
+/* Text diary card */
+.diary-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  cursor: pointer;
+}
+
+.diary-card-content {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.diary-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #BBB;
+}
+
+.float-add {
+  position: absolute;
+  bottom: 100px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #FF9800, #FFB74D);
+  color: #fff;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(255, 152, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.tab-bar {
+  display: flex;
+  background: #fff;
+  border-top: 1px solid #F0EDE8;
+  padding: 8px 0 20px;
+  margin-top: auto;
+}
+
+.tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
+.tab-icon { font-size: 22px; }
+.tab-label { font-size: 10px; color: #999; font-weight: 500; }
+.tab-item.active .tab-label { color: #FF9800; font-weight: 700; }
+.tab-item.active .tab-label { color: #FF9800; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 🔋</span>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-title">成长相册</div>
+  </div>
+
+  <div class="content-scroll">
+
+    <div class="age-banner">
+      🐱 花花 已经来到这个世界 <strong>3岁2个月</strong> 啦～
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="switchFilter(this)">全部</button>
+      <button class="filter-tab" onclick="switchFilter(this)">📷 照片</button>
+      <button class="filter-tab" onclick="switchFilter(this)">🎬 视频</button>
+      <button class="filter-tab" onclick="switchFilter(this)">📝 日记</button>
+    </div>
+
+    <!-- 2026年8月 -->
+    <div class="month-group">
+      <div class="month-label">2026年8月</div>
+      <div class="timeline">
+        <div class="timeline-item" data-type="photo">
+          <div class="timeline-dot"></div>
+          <div class="photo-card">
+            <div class="photo-card-img">🐱</div>
+            <div class="photo-card-footer">
+              <span class="photo-card-date">8月15日</span>
+              <span class="photo-card-tag">🎂 生日派对</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-type="diary">
+          <div class="timeline-dot" style="border-color:#4CAF50;"></div>
+          <div class="diary-card">
+            <div class="diary-card-content">花花今天3岁啦！给它买了一个金枪鱼蛋糕，开心得一直蹭我腿～</div>
+            <div class="diary-card-footer">
+              <span>8月15日</span>
+              <span>❤️ 12</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2026年7月 -->
+    <div class="month-group">
+      <div class="month-label">2026年7月</div>
+      <div class="timeline">
+        <div class="timeline-item" data-type="video">
+          <div class="timeline-dot"></div>
+          <div class="photo-card">
+            <div class="photo-card-img blue">
+              🎬
+              <div class="photo-card-play">▶</div>
+            </div>
+            <div class="photo-card-footer">
+              <span class="photo-card-date">7月20日</span>
+              <span class="photo-card-tag">🐾 第一次游泳</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-type="photo">
+          <div class="timeline-dot"></div>
+          <div class="photo-card">
+            <div class="photo-card-img purple">😴</div>
+            <div class="photo-card-footer">
+              <span class="photo-card-date">7月5日</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2026年6月 -->
+    <div class="month-group">
+      <div class="month-label">2026年6月</div>
+      <div class="timeline">
+        <div class="timeline-item" data-type="photo">
+          <div class="timeline-dot"></div>
+          <div class="photo-card">
+            <div class="photo-card-img green">🐾</div>
+            <div class="photo-card-footer">
+              <span class="photo-card-date">6月10日</span>
+              <span class="photo-card-tag">🏥 体检日</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding-bottom: 20px;"></div>
+  </div>
+
+  <button class="float-add">＋</button>
+
+  <div class="tab-bar">
+    <div class="tab-item">
+      <div class="tab-icon">🐾</div>
+      <div class="tab-label">宠物</div>
+    </div>
+    <div class="tab-item active">
+      <div class="tab-icon">📸</div>
+      <div class="tab-label">相册</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">👤</div>
+      <div class="tab-label">我的</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchFilter(btn) {
+  document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  var filter = btn.textContent.trim();
+  var typeMap = { '全部': null, '📷 照片': 'photo', '🎬 视频': 'video', '📝 日记': 'diary' };
+  var target = typeMap[filter];
+  document.querySelectorAll('.timeline-item').forEach(function(item) {
+    if (!target || item.getAttribute('data-type') === target) {
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>

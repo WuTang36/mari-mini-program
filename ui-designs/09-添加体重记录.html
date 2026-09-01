@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>界面九：添加体重记录 - 宠物健康管家</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.phone-frame {
+  width: 375px;
+  height: 812px;
+  background: #F8F6F2;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  padding: 12px 24px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+.nav-bar {
+  padding: 8px 16px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-back {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background: #fff;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.nav-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2D2D2D;
+  flex: 1;
+}
+
+.form-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 16px 0;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  margin-bottom: 14px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #F5F2ED;
+  min-height: 48px;
+  cursor: pointer;
+}
+
+.form-row:last-child { border-bottom: none; }
+.form-row.no-click { cursor: default; }
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.form-label.required::after {
+  content: ' *';
+  color: #FF5252;
+  font-size: 12px;
+}
+
+.form-value {
+  flex: 1;
+  font-size: 14px;
+  color: #2D2D2D;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.form-value.placeholder { color: #C8B8A0; }
+
+.form-input {
+  flex: 1;
+  font-size: 14px;
+  color: #2D2D2D;
+  text-align: right;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-input::placeholder { color: #C8B8A0; }
+
+.form-arrow { font-size: 14px; color: #CCC; flex-shrink: 0; }
+
+.weight-big-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+  border-bottom: 1px solid #F5F2ED;
+}
+
+.weight-big-label {
+  font-size: 13px;
+  color: #999;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.weight-big-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+}
+
+.weight-big-input {
+  width: 130px;
+  font-size: 40px;
+  font-weight: 800;
+  color: #2D2D2D;
+  text-align: center;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: inherit;
+  caret-color: #FF9800;
+}
+
+.weight-big-input::placeholder { color: #DDD; }
+
+.weight-big-unit {
+  font-size: 20px;
+  font-weight: 700;
+  color: #FF9800;
+}
+
+.weight-big-hint {
+  font-size: 11px;
+  color: #BBB;
+  margin-top: 8px;
+}
+
+.weight-quick {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #F5F2ED;
+}
+
+.weight-quick-btn {
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #999;
+  background: #F5F2ED;
+  border: none;
+  cursor: pointer;
+}
+
+.weight-quick-btn:active { background: #FF9800; color: #fff; }
+
+.save-section {
+  padding: 20px 0 30px;
+}
+
+.save-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #FF9800, #FFB74D);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 152, 0, 0.3);
+}
+
+.save-btn:active { transform: scale(0.98); opacity: 0.9; }
+
+.date-picker-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: flex-end;
+  z-index: 10;
+}
+
+.date-picker-overlay.show { display: flex; }
+
+.date-picker-panel {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  padding: 16px;
+}
+
+.date-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.date-picker-cancel { color: #999; font-size: 14px; cursor: pointer; }
+.date-picker-confirm { color: #FF9800; font-size: 14px; font-weight: 700; cursor: pointer; }
+.date-picker-title { font-size: 15px; font-weight: 700; color: #2D2D2D; }
+
+.date-picker-columns {
+  display: flex;
+  gap: 12px;
+  height: 180px;
+  overflow: hidden;
+}
+
+.date-picker-col {
+  flex: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  text-align: center;
+}
+
+.date-picker-item {
+  padding: 10px 0;
+  font-size: 16px;
+  color: #CCC;
+  scroll-snap-align: center;
+  cursor: pointer;
+}
+
+.date-picker-item.selected {
+  color: #2D2D2D;
+  font-weight: 700;
+  font-size: 18px;
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 🔋</span>
+  </div>
+
+  <div class="nav-bar">
+    <button class="nav-back">‹</button>
+    <div class="nav-title">记录体重</div>
+  </div>
+
+  <div class="form-scroll">
+    <div class="form-card">
+      <div class="weight-big-section">
+        <div class="weight-big-label">当前体重</div>
+        <div class="weight-big-row">
+          <input class="weight-big-input" type="number" id="weightInput" placeholder="0.0" step="0.01" min="0" oninput="limitWeight(this)">
+          <span class="weight-big-unit">kg</span>
+        </div>
+        <div class="weight-big-hint">上次记录：3.9kg（2026-07-15）</div>
+      </div>
+
+      <div class="weight-quick">
+        <button class="weight-quick-btn" onclick="setWeight(3.5)">3.5kg</button>
+        <button class="weight-quick-btn" onclick="setWeight(3.9)">3.9kg</button>
+        <button class="weight-quick-btn" onclick="setWeight(4.2)">4.2kg</button>
+        <button class="weight-quick-btn" onclick="setWeight(4.5)">4.5kg</button>
+      </div>
+
+      <div class="form-row" onclick="openDatePicker()">
+        <span class="form-label required">记录日期</span>
+        <div class="form-value placeholder" id="dateValue">
+          请选择日期
+          <span class="form-arrow">›</span>
+        </div>
+      </div>
+
+      <div class="form-row no-click" style="border-bottom:none;">
+        <span class="form-label">备注</span>
+        <input class="form-input" type="text" placeholder="选填，如：饭后称重">
+      </div>
+    </div>
+
+    <div class="save-section">
+      <button class="save-btn">⚖️ 保存体重记录</button>
+    </div>
+  </div>
+
+  <div class="date-picker-overlay" id="datePicker" onclick="this.classList.remove('show')">
+    <div class="date-picker-panel" onclick="event.stopPropagation()">
+      <div class="date-picker-header">
+        <span class="date-picker-cancel" onclick="document.getElementById('datePicker').classList.remove('show')">取消</span>
+        <span class="date-picker-title">选择日期</span>
+        <span class="date-picker-confirm" onclick="confirmDatePicker()">确定</span>
+      </div>
+      <div class="date-picker-columns">
+        <div class="date-picker-col" id="yearCol"></div>
+        <div class="date-picker-col" id="monthCol"></div>
+        <div class="date-picker-col" id="dayCol"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function limitWeight(el) {
+  if (el.value < 0) el.value = 0;
+  var parts = el.value.split('.');
+  if (parts.length > 1 && parts[1].length > 2) {
+    el.value = parseFloat(el.value).toFixed(2);
+  }
+}
+
+function setWeight(v) {
+  document.getElementById('weightInput').value = v;
+}
+
+var selYear = 2026, selMonth = 8, selDay = 15;
+
+function initDatePicker() {
+  var yc = document.getElementById('yearCol'), mc = document.getElementById('monthCol'), dc = document.getElementById('dayCol');
+  var yhtml = '', mhtml = '', dhtml = '';
+  for (var y = 2026; y >= 2020; y--) yhtml += '<div class="date-picker-item'+(y===selYear?' selected':'')+'" onclick="pickYear('+y+')">'+y+'年</div>';
+  for (var m = 1; m <= 12; m++) mhtml += '<div class="date-picker-item'+(m===selMonth?' selected':'')+'" onclick="pickMonth('+m+')">'+m+'月</div>';
+  for (var d = 1; d <= 31; d++) dhtml += '<div class="date-picker-item'+(d===selDay?' selected':'')+'" onclick="pickDay('+d+')">'+d+'日</div>';
+  yc.innerHTML = yhtml; mc.innerHTML = mhtml; dc.innerHTML = dhtml;
+}
+function pickYear(y) { selYear = y; initDatePicker(); }
+function pickMonth(m) { selMonth = m; initDatePicker(); }
+function pickDay(d) { selDay = d; initDatePicker(); }
+function openDatePicker() {
+  document.getElementById('datePicker').classList.add('show');
+}
+function confirmDatePicker() {
+  var val = selYear + '-' + String(selMonth).padStart(2,'0') + '-' + String(selDay).padStart(2,'0');
+  document.getElementById('dateValue').textContent = val;
+  document.getElementById('dateValue').classList.remove('placeholder');
+  document.getElementById('datePicker').classList.remove('show');
+}
+initDatePicker();
+</script>
+</body>
+</html>

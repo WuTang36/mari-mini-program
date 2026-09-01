@@ -1,0 +1,84 @@
+<!-- 宠物首页 -->
+<navigation-bar title="我的宠物" back="{{false}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y bind:tap="hideSwipe">
+  <!-- 提醒卡片 -->
+  <view class="reminder-section" bind:tap="goReminderCenter">
+    <view class="reminder-bar">
+      <text class="reminder-icon">🔔</text>
+      <text class="reminder-count"><text class="reminder-num">{{unreadCount}}</text> 条待处理提醒</text>
+      <text class="reminder-hint">查看详情</text>
+      <text class="reminder-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 引导横幅（使用 view 替代 text 确保 Skyline 换行） -->
+  <view wx:if="{{pets.length === 0}}" class="guide-banner" bind:tap="addPet">
+    <text class="guide-emoji">🐱</text>
+    <view class="guide-content">
+      <view class="guide-title">添加你的第一只宠物吧</view>
+      <view class="guide-sub">记录它的每一次成长 🐾</view>
+    </view>
+    <view class="guide-action">去添加</view>
+  </view>
+
+  <!-- 宠物列表 -->
+  <view wx:for="{{pets}}" wx:key="_id" class="pet-card-wrapper">
+    <view
+      class="pet-card {{swipedPetId === item._id ? 'swiped' : ''}}"
+      bind:tap="goPetDetail"
+      data-id="{{item._id}}"
+      bindtouchstart="onTouchStart"
+      bindtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd"
+    >
+      <view class="pet-avatar">
+        <image wx:if="{{item.avatarUrl}}" src="{{item.avatarUrl}}" mode="aspectFill" binderror="onAvatarError" data-index="{{index}}"></image>
+        <image wx:else class="pet-avatar-emoji" src="/Logo.png" mode="aspectFill"></image>
+      </view>
+      <view class="pet-info">
+        <view class="pet-name">{{item.name}}</view>
+        <view class="pet-meta">
+          <text>{{item.breed}}</text>
+          <text class="pet-meta-dot"></text>
+          <text class="gender-dot {{item.gender === '公' ? 'male' : 'female'}}">●</text>
+          <text>{{item.gender}}</text>
+          <text class="pet-meta-dot"></text>
+          <text>{{item.ageText}}</text>
+        </view>
+        <view class="pet-status">
+          <text wx:if="{{item.hasVaccineWarning}}" class="status-tag warning">疫苗即将到期</text>
+          <text wx:if="{{item.hasDewormWarning}}" class="status-tag warning">驱虫即将到期</text>
+          <text wx:if="{{!item.hasVaccineWarning && !item.hasDewormWarning}}" class="status-tag ok">全部正常</text>
+        </view>
+      </view>
+      <text class="pet-arrow">›</text>
+    </view>
+    <!-- 删除按钮 -->
+    <view class="delete-btn" bind:tap="onDeletePet" data-id="{{item._id}}">
+      <text>删除</text>
+    </view>
+  </view>
+
+  <!-- 添加宠物按钮 -->
+  <view class="add-pet-btn" bind:tap="addPet">
+    <text>＋ 添加宠物</text>
+  </view>
+
+  <view style="height: 40rpx;"></view>
+</scroll-view>
+
+<!-- 删除宠物警示弹窗 -->
+<view wx:if="{{showDeleteDialog}}" class="delete-overlay" bind:tap="cancelDelete">
+  <view class="delete-panel" catch:tap="">
+    <view class="delete-icon">⚠️</view>
+    <view class="delete-title">删除宠物</view>
+    <view class="delete-desc">删除后宠物档案将无法恢复！</view>
+    <view class="delete-sub">请选择是否保留该宠物的成长日记：</view>
+    <view class="delete-actions">
+      <view class="del-option keep" bind:tap="deletePetOnly">仅删除宠物</view>
+      <view class="del-option danger" bind:tap="deletePetWithDiaries">删除宠物及日记</view>
+    </view>
+    <view class="delete-cancel" bind:tap="cancelDelete">取消</view>
+  </view>
+</view>

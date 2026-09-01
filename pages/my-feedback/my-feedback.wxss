@@ -1,0 +1,137 @@
+page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+}
+
+.page-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.mf-content {
+  padding: 24rpx 32rpx 80rpx;
+}
+
+/* 感谢条 */
+.thanks-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  background: #E8F5E9;
+  border-radius: 20rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.thanks-icon {
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+.thanks-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: #2E7D32;
+  line-height: 1.6;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 96rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+  margin-bottom: 48rpx;
+}
+
+.empty-btn {
+  padding: 22rpx 72rpx;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 700;
+  border-radius: 44rpx;
+  box-shadow: 0 8rpx 28rpx rgba(255, 152, 0, 0.3);
+}
+
+/* 反馈列表 */
+.fb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.fb-card {
+  background: var(--color-card);
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.03);
+}
+
+.fb-content {
+  font-size: 28rpx;
+  color: var(--color-text);
+  line-height: 1.6;
+  margin-bottom: 20rpx;
+}
+
+.fb-media {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.fb-media-item {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  background: #F0EDE8;
+}
+
+.fb-media-thumb {
+  width: 100%;
+  height: 100%;
+}
+
+.fb-media-video {
+  width: 100%;
+  height: 100%;
+  background: #263238;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fb-media-video-icon {
+  font-size: 44rpx;
+}
+
+.fb-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fb-contact {
+  font-size: 22rpx;
+  color: var(--color-text-hint);
+}
+
+.fb-time {
+  font-size: 22rpx;
+  color: var(--color-text-hint);
+}

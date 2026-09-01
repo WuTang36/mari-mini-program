@@ -1,0 +1,122 @@
+<!-- 添加疫苗记录 -->
+<navigation-bar title="{{isEdit ? '编辑疫苗' : '添加疫苗'}}" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="form-card">
+    <view class="form-row" bind:tap="showVaccinePicker">
+      <text class="form-label required">疫苗名称</text>
+      <text class="form-value {{form.name ? '' : 'placeholder'}}">{{form.name || '请选择疫苗'}}</text>
+      <text class="form-arrow">›</text>
+    </view>
+
+    <view class="form-row" bind:tap="showDatePicker" data-field="date">
+      <text class="form-label required">接种日期</text>
+      <text class="form-value {{form.date ? '' : 'placeholder'}}">{{form.date || '请选择日期'}}</text>
+      <text class="form-arrow">›</text>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">下次到期</text>
+      <view class="form-value-row">
+        <text wx:if="{{form.nextDate}}" class="form-value auto-calc">{{form.nextDate}} <text class="auto-tag">自动计算</text></text>
+        <text wx:else class="form-value placeholder">选择接种日期后自动计算</text>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">批号</text>
+      <input class="form-input" placeholder="选填" value="{{form.batchNo}}" bindinput="onFieldInput" data-field="batchNo"/>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">接种机构</text>
+      <input class="form-input" placeholder="选填" value="{{form.clinic}}" bindinput="onFieldInput" data-field="clinic"/>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">疫苗本照片</text>
+      <text class="form-value photo-upload" bind:tap="uploadPhoto">{{form.photoUrl ? '已上传' : '点击上传'}}</text>
+      <text class="form-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="save-section">
+    <view class="btn-primary" bind:tap="saveRecord">保存</view>
+  </view>
+
+  <view style="height: 40rpx;"></view>
+</scroll-view>
+
+<!-- 疫苗选择面板 -->
+<view class="sheet-overlay {{showVaccinePicker ? 'show' : ''}}" bind:tap="hideVaccinePicker">
+  <view class="sheet-panel" catch:tap="">
+    <view class="sheet-header">
+      <text class="sheet-title">选择疫苗</text>
+      <text class="sheet-close" bind:tap="hideVaccinePicker">✕</text>
+    </view>
+    <scroll-view class="sheet-list" scroll-y>
+      <view wx:for="{{vaccineOptions}}" wx:key="*this" class="sheet-option {{form.name === item ? 'selected' : ''}}" bind:tap="selectVaccine" data-name="{{item}}">
+        {{item}}
+        <text wx:if="{{form.name === item}}" class="check">✓</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>
+
+<!-- 自定义疫苗弹窗 -->
+<view class="dialog-overlay {{showCustomVaccineDialog ? 'show' : ''}}">
+  <view class="dialog-panel" catch:tap="">
+    <view class="dialog-header">
+      <text class="dialog-title">自定义疫苗</text>
+      <text class="dialog-close" bind:tap="cancelCustomVaccine">✕</text>
+    </view>
+    <view class="dialog-body">
+      <input class="dialog-input" placeholder="请输入疫苗名称" value="{{customVaccineInput}}" bindinput="onCustomVaccineInput" maxlength="20" focus="{{showCustomVaccineDialog}}"/>
+    </view>
+    <view class="dialog-footer">
+      <view class="dialog-btn cancel" bind:tap="cancelCustomVaccine">取消</view>
+      <view class="dialog-btn confirm" bind:tap="confirmCustomVaccine">确定</view>
+    </view>
+  </view>
+</view>
+
+<!-- 日期选择器 -->
+<view wx:if="{{showDatePicker}}" class="sheet-overlay show" bind:tap="hideDatePicker">
+  <view class="sheet-panel" catch:tap="">
+    <view class="sheet-header">
+      <text class="sheet-title">选择日期</text>
+      <text class="sheet-close" bind:tap="hideDatePicker">✕</text>
+    </view>
+    <picker-view class="date-picker-view" value="{{datePickerValue}}" bindchange="onDateChange" indicator-style="height: 50px;">
+      <picker-view-column>
+        <view wx:for="{{years}}" wx:key="*this" class="picker-item">{{item}}年</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{months}}" wx:key="*this" class="picker-item">{{item}}月</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{days}}" wx:key="*this" class="picker-item">{{item}}日</view>
+      </picker-view-column>
+    </picker-view>
+    <view class="sheet-footer">
+      <view class="btn-primary" bind:tap="confirmDate">确定</view>
+    </view>
+  </view>
+</view>
+
+<!-- 订阅引导弹窗 -->
+<view wx:if="{{showSubscribeGuide}}" class="dialog-overlay show">
+  <view class="dialog-panel" catch:tap="">
+    <view class="dialog-header">
+      <text class="dialog-title">订阅提醒</text>
+    </view>
+    <view class="dialog-body">
+      <view class="guide-icon">🔔</view>
+      <view class="guide-text">疫苗到期前 7 天和当天，微信通知你，不错过接种时间</view>
+    </view>
+    <view class="dialog-footer">
+      <view class="dialog-btn cancel" bind:tap="skipSubscribeGuide">跳过</view>
+      <view class="dialog-btn confirm" bind:tap="subscribeGuideSubscribe">去订阅</view>
+    </view>
+  </view>
+</view>

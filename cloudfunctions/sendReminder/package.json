@@ -1,0 +1,9 @@
+{
+  "name": "sendReminder",
+  "version": "1.0.0",
+  "description": "订阅消息提醒推送",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

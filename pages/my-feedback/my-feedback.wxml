@@ -1,0 +1,48 @@
+<!-- 我的反馈记录 -->
+<navigation-bar title="我的反馈记录" back="{{true}}" color="black" background="#F8F6F2"></navigation-bar>
+
+<scroll-view class="page-scroll" scroll-y>
+  <view class="mf-content">
+    <!-- 感谢条 -->
+    <view class="thanks-banner">
+      <text class="thanks-icon">🙏</text>
+      <text class="thanks-text">感谢您的反馈！我们已收到您的意见，正在尽快查看处理，预计 1‑3 个工作日回复。</text>
+    </view>
+
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="empty-state">
+      <text class="empty-text">加载中…</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:elif="{{list.length === 0}}" class="empty-state">
+      <text class="empty-icon">📭</text>
+      <text class="empty-text">暂无反馈记录</text>
+      <view class="empty-btn" bind:tap="goFeedback">去反馈</view>
+    </view>
+
+    <!-- 反馈列表 -->
+    <view wx:else class="fb-list">
+      <view wx:for="{{list}}" wx:key="id" class="fb-card">
+        <view class="fb-content">{{item.content}}</view>
+
+        <!-- 媒体 -->
+        <view wx:if="{{item.media.length > 0}}" class="fb-media">
+          <view wx:for="{{item.media}}" wx:for-item="m" wx:key="url" class="fb-media-item" bind:tap="previewMedia" data-url="{{m.url}}" data-type="{{m.type}}">
+            <image wx:if="{{m.type === 'image'}}" class="fb-media-thumb" src="{{m.url}}" mode="aspectFill"></image>
+            <view wx:else class="fb-media-video">
+              <text class="fb-media-video-icon">▶️</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="fb-meta">
+          <text wx:if="{{item.contact}}" class="fb-contact">📮 {{item.contact}}</text>
+          <text class="fb-time">{{item.dateText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view style="height: 40rpx;"></view>
+  </view>
+</scroll-view>
